@@ -1,2 +1,2 @@
 # PIXI_3
-£rd gen game framework for slots
+3rd gen game framework for slots
