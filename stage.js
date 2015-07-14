@@ -92,7 +92,7 @@ function onWindowResize(resizeEvent){
     renderer.resize(size.x,size.y);
     
     // Calculate scale based on background dimensions (gameWidth, gameHeight)
-    var scale = new Point(size.x / gameWidth, size.y / gameHeight)
+    var scale = getWindowScale();
     
     // Dispatch a RESIZE event: any interested object can listen and take action.
     var data = Object.create(null);
@@ -100,6 +100,14 @@ function onWindowResize(resizeEvent){
     data.scale = scale;
     Events.Dispatcher.dispatchEvent( new Event("RESIZE",data));
 };
+
+/**
+ * UTILS: Get scale of window
+ */ 
+function getWindowScale(){
+    var size = getWindowBounds();
+    return new Point(size.x/gameWidth, size.y/gameHeight);    
+}
 
 /**
  * UTILS: Get area of window

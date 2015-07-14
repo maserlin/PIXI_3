@@ -24,12 +24,17 @@ function SpinSymbol(id){
 
     this.id = id;
     this.gotoAndStop(this.id);
-    console.log("Symbol set to " + this.id);
+    // console.log("Symbol set to " + this.id);
+
 }
 
 SpinSymbol.prototype = Object.create(PIXI.extras.MovieClip.prototype);
 SpinSymbol.prototype.constructor = SpinSymbol;
 SpinSymbol.prototype.blur = false;
+
+
+
+
 
 /**
  * COULD use ".texture = nnn" and not use movie clip 

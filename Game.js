@@ -25,9 +25,6 @@ Game.MAIN = "main";
 Game.CONSOLE = "console";
 Game.prototype.layers = null;
 Game.prototype.reelsScreen = null;
-Game.prototype.reelset = null;
-Game.prototype.winSplash = null;
-Game.prototype.winLines = null;
 Game.prototype.bonusScreen = null;
 
   
@@ -71,8 +68,6 @@ Game.prototype.onAssetsLoaded = function(obj){
     // For all UI components
     stage.addChild(this.layers[Game.CONSOLE]);
 
-    // non-visual component
-    this.winCalculator = new WinCalculator();
 
     // Create a background manager with a couple of images to play with.
     this.gameBackground = new GameBackground(["im/bg.jpg","im/bg2.jpg"]);
@@ -80,10 +75,6 @@ Game.prototype.onAssetsLoaded = function(obj){
     // gameBackground should be able to do its own cross-fades etc because it *is*
     // a PIXI.Container: we can manage it as a single item. 
     this.layers[Game.BACKGROUND].addChild(this.gameBackground);
-
-    // Reelset is a container which builds up the reels components in order:
-    // ReelBg, Reels x5, a mask for clipping the top and bottom, and reelFg overlay   
-    this.reelset = new Reelset(reels_0);
 
     // WinSplash This is basically the win display layer: splash, winlines etc.
     // Underneath it the reelset can swap in animating symbols etc (event driven).
@@ -94,16 +85,15 @@ Game.prototype.onAssetsLoaded = function(obj){
     // component to the main display container
     // TODO resizing for all reelsScreen components
     // TODO winlines must be in register with the symbols!
-    this.reelsScreen = new ReelsScreen();
-    this.reelsScreen.addChild(this.reelset);
-    this.winlines = new Winlines();
-    this.reelsScreen.addChild(this.winlines);
-    this.winSplash = new WinSplash();
-    this.reelsScreen.addChild(this.winSplash);
+    this.reelsScreen = new ReelsScreen(reels_0);
+//    this.reelsScreen.addChild(this.reelset);
+    // this.winlines = new Winlines();
+    // this.reelsScreen.addChild(this.winlines);
+    // this.winSplash = new WinSplash();
+    // this.reelsScreen.addChild(this.winSplash);
 
     // Right now we want to show the ReelsScreen
     this.layers[Game.MAIN].addChild(this.reelsScreen);    
-    
     
     
     
@@ -119,11 +109,6 @@ Game.prototype.onAssetsLoaded = function(obj){
     Events.Dispatcher.addEventListener("SPIN",this.onSpinReels);
     Events.Dispatcher.addEventListener("STOP",this.onStopReels);
     
-    this.onReelsSpinning = this.onReelsSpinning.bind(this);
-    Events.Dispatcher.addEventListener("ALL_REELS_SPINNING",this.onReelsSpinning);
-
-    this.onReelsStopped = this.onReelsStopped.bind(this);
-    Events.Dispatcher.addEventListener("ALL_REELS_STOPPED",this.onReelsStopped);
 
     this.onWinSplashComplete = this.onWinSplashComplete.bind(this);
     Events.Dispatcher.addEventListener("WIN_SPLASH_COMPLETE",this.onWinSplashComplete);    
@@ -131,14 +116,6 @@ Game.prototype.onAssetsLoaded = function(obj){
     //this.addExplosion()
 };
 
-Game.prototype.onReelsSpinning = function(){
-        Events.Dispatcher.dispatchEvent(new Event("STOP"));
-};
-
-Game.prototype.onReelsStopped = function(){
-    var wins = this.winCalculator.calculate(this.reelset.getReelMap());
-    this.winSplash.show(wins);
-};
 
 Game.prototype.onWinSplashComplete = function(){
     console.log("Wins complete");   
@@ -151,7 +128,8 @@ Game.prototype.onSpinReels = function(event){
     this.cheat = null;
     if(event.data.name == "cheat"){
         console.log("Cheat button");
-        this.cheat = [0,0,0,0,0];
+        this.cheat = [27,26,28,17,4];
+        this.cheat = [13,13,5,25,1];
     }
     
     
@@ -160,9 +138,8 @@ Game.prototype.onSpinReels = function(event){
     req.stake = 200;
     req.winlines = 20;
     this.serverProxy.makeRequest(req);
-    
-    this.reelset.spinReels([0,200,400,600,800]);
-    
+
+    this.reelsScreen.spinReels([0,200,400,600,800]);
 };
 
 Game.prototype.onStopReels = function(){
@@ -174,7 +151,7 @@ Game.prototype.onStopReels = function(){
     if(this.cheat != null)rands = this.cheat;
     console.log("call stop pos " + rands);
     //rands = [8,31,26,4,6];
-    this.reelset.stopReels([0,200,400,600,800],rands);
+    this.reelsScreen.stopReels([0,200,400,600,800],rands);
 };
 
 

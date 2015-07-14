@@ -1,4 +1,4 @@
-function Reelset(reels){
+function Reelset(reelband){
     PIXI.Container.call(this);
     
     // Reel Background    
@@ -6,22 +6,20 @@ function Reelset(reels){
     reelBg.position.x = 16;
     reelBg.position.y = 164;
     this.addChild(reelBg);
+    console.log(reelBg.position.x,reelBg.anchor.x,reelBg.width)
     
     // Reels
     this.reels = [];
-    for(var reel in reels)
+    
+    // We should only get the first (default) reelband to set up with
+    for(var reel in reelband)
     {
-        this.reels.push(new Reel(reel, reels[reel]));
-    }
-    for(reel in this.reels){
+        // Send var reel as an id, and the relevant reelData 
+        this.reels.push(new Reel(reel, reelband[reel]));
+        // Add each reel to our display container (to us in other words)
         this.addChild(this.reels[reel]);
     }
-
-    this.pivot.x = this.width/2;
-    this.pivot.y = this.height/2;
-    this.position.x = getWindowBounds().x/2;
-    this.position.y = getWindowBounds().y/2;
-
+    
     // Masking
     var thing = new PIXI.Graphics();
     thing.beginFill(0x000000,0.0);
@@ -49,13 +47,31 @@ function Reelset(reels){
 
     this.onReelSpinning = this.onReelSpinning.bind(this);
     Events.Dispatcher.addEventListener("REEL_SPINNING",this.onReelSpinning);
-
-    this.resize = this.resize.bind(this);
-    Events.Dispatcher.addEventListener("RESIZE", this.resize);
+    
+    this.setSymbolData = this.setSymbolData.bind(this);
+    this.setSymbolData();
 }
 Reelset.prototype = Object.create(PIXI.Container.prototype);
 Reelset.prototype.contructor = Reelset;
+Reelset.prototype.reels = null;
+Reelset.prototype.symbolData = null;
+Reelset.symbolData = null;
 
+
+/**
+ * 2D array reel x symbol bounds for winline display
+ */
+Reelset.prototype.setSymbolData = function(){
+    Reelset.symbolData = [];
+    for(var reel in this.reels){
+        Reelset.symbolData.push(this.reels[reel].getPositioningData());
+    }
+}
+
+
+/**
+ * event.data == 4 means the last reel is spinning
+ */
 Reelset.prototype.onReelSpinning = function(event){
     if(event.data == 4)
     {
@@ -63,6 +79,9 @@ Reelset.prototype.onReelSpinning = function(event){
     }
 }
 
+/**
+ * event.data == 4 means the last reel has stopped
+ */
 Reelset.prototype.onReelStopped = function(event){
     if(event.data == 4)
     {
@@ -74,10 +93,16 @@ Reelset.prototype.onReelStopped = function(event){
     }
 }
 
+/**
+ * Linear map of symbols in view 0-14 (top to bottom L->R)
+ */
 Reelset.prototype.getReelMap = function(){
     return this.reelMap;
 }
 
+/**
+ * TODO use system timer?
+ */
 Reelset.prototype.spinReels = function(timing){
     var next = 0;
     var that = this;
@@ -89,6 +114,9 @@ Reelset.prototype.spinReels = function(timing){
     }
 }
 
+/**
+ * TODO use system timer?
+ */
 Reelset.prototype.stopReels = function(timing, positions){
     var that = this;
     var next = 0;
@@ -100,17 +128,3 @@ Reelset.prototype.stopReels = function(timing, positions){
     }
 }
 
-
-/**
- * "this" is the Container which is being called, not Reelset 
- * @param {Object} data
- */
-Reelset.prototype.resize = function(event){
-    var data = event.data;
-    // Scale both by X to maintain aspect ratio
-    this.scale.x = data.scale.x;
-    this.scale.y = data.scale.x;
-    // Reposition to center
-    this.position.x = data.size.x/2;
-    this.position.y = data.size.y/2;
-}

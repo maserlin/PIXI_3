@@ -1,5 +1,5 @@
 function Reel(reel, reelband){
-    
+    this.screen = screen;
     PIXI.Container.call(this);
 
     this.reelband = reelband;
@@ -31,11 +31,12 @@ function Reel(reel, reelband){
         s.position.y = i * 140;
         this.addChild(s);
         this.symbols.push(s);
-        //console.log("s at " + s.position.y)
     }
+
     this.frameTop = this.symbols[1].position.y;
     
     this.animate = this.animate.bind(this);
+    this.getPositioningData = this.getPositioningData.bind(this);
 }
 
 Reel.prototype = Object.create(PIXI.Container.prototype);
@@ -48,6 +49,42 @@ Reel.SETTING = 3;
 Reel.STOPPING = 4;
 Reel.BOUNCING = 5;
 Reel.prototype.state = Reel.IDLE;
+
+
+/**
+ * 
+ */
+Reel.prototype.getPositioningData = function(){
+    
+    var scaling = ReelsScreen.scaleDown;
+    var scale = getWindowScale();
+    
+    console.log("REEL", this.id)
+    var data = [];
+    
+    for(var s=1; s<4; ++s){
+        
+
+        var w = 155;//this.symbols[s].getBounds().width;
+        var h = 134;//this.symbols[s].getBounds().height;
+        
+        var p = this.symbols[s].toGlobal(new Point(0,0));
+        var l = this.symbols[s].toLocal(p);
+        
+
+        var r = new Rectangle();
+        r.x = this.position.x + 27;
+        r.y = this.symbols[s].position.y + 34;
+        r.width = w;
+        r.height = h;
+        
+        data.push(r);        
+        console.log("D", data[data.length-1].x,data[data.length-1].y,data[data.length-1].width,data[data.length-1].height)        
+        console.log("");
+    }
+    
+    return data;   
+}
 
 /**
  * SPIN called externally to start reel 
