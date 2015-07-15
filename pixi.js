@@ -8166,8 +8166,15 @@ Graphics.prototype.arc = function(cx, cy, radius, startAngle, endAngle, anticloc
 Graphics.prototype.beginFill = function (color, alpha)
 {
     this.filling = true;
+    
+    if(color == 0xffffff && alpha == 0)
+    {
+        console.log("Try transparency");
+    }
+    else{
     this.fillColor = color || 0;
     this.fillAlpha = (alpha === undefined) ? 1 : alpha;
+    }    
 
     if (this.currentPath)
     {
@@ -8209,6 +8216,8 @@ Graphics.prototype.drawRect = function ( x, y, width, height )
 
     return this;
 };
+
+
 
 /**
  *

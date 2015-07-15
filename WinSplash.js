@@ -52,6 +52,76 @@ WinSplash.prototype.show = function(winObj){
 };
 
 /*
+ * Animate in 
+ */
+WinSplash.prototype.showTotal = function(winObj){
+    this.winObj = winObj;
+    totWin = 0;
+    for(var win in this.winObj.winAmount)totWin += this.winObj.winAmount[win];
+    totWin /= 100;
+    totWin = totWin.toFixed(2);
+    
+    
+    // Fools showNextWin into thinking we're all done (which we are, in fact)
+    this.winShown = this.winObj.lines.length;
+
+    var msg = "GBP " + totWin + " from " + this.winObj.lines.length;
+    var lineMsg = this.winObj.lines.length == 1 ? " line." : " lines.";
+    msg += lineMsg;
+    this.text = new PIXI.Text(msg, {font : '48px Arial', fill : 0xff1010, align : 'center'} );    
+ 
+    this.text.anchor.x = 0.5; 
+    this.text.anchor.y = 0.5;
+    this.text.position.x = this.bg.position.x;
+    this.text.position.y = 50;
+ 
+    this.addChild(this.text);
+
+ 
+    this.visible = true;
+    this.scale.x = this.scale.y = 0;
+
+    this.animateIn = true;
+
+    // Add self to animation timer
+    globalTicker.add(this.animate);
+};
+
+/*
+ * Do next
+ */
+WinSplash.prototype.showNextWin = function(){
+
+    if(this.winShown < this.winObj.lines.length)
+    {
+        var msg = "GBP " + this.winObj.winAmount[this.winShown] + " on line " + (this.winObj.lines[this.winShown]+1);
+        this.text = new PIXI.Text(msg,{font : '48px Arial', fill : 0xff1010, align : 'center'});    
+     
+        this.text.anchor.x = 0.5; 
+        this.text.anchor.y = 0.5;
+        this.text.position.x = this.bg.position.x;
+        this.text.position.y = 50;
+     
+        this.addChild(this.text);
+
+     
+        this.visible = true;
+        this.scale.x = this.scale.y = 0;
+
+        this.animateIn = true;
+
+        // Add self to animation timer
+        globalTicker.add(this.animate);
+
+        ++this.winShown;
+    }
+    else
+    {
+        Events.Dispatcher.dispatchEvent(new Event("WIN_SPLASH_COMPLETE"));  
+    }
+};
+
+/*
  * Animate out
  */
 WinSplash.prototype.hide = function(){
@@ -104,37 +174,4 @@ WinSplash.prototype.animate = function(){
     }
 };
 
-/*
- * Do next
- */
-WinSplash.prototype.showNextWin = function(){
-
-    if(this.winShown < this.winObj.lines.length)
-    {
-        var msg = "GBP " + this.winObj.winAmount[this.winShown] + " on line " + (this.winObj.lines[this.winShown]+1);
-        this.text = new PIXI.Text(msg,{font : '48px Arial', fill : 0xff1010, align : 'center'});    
-     
-        this.text.anchor.x = 0.5; 
-        this.text.anchor.y = 0.5;
-        this.text.position.x = this.bg.position.x;
-        this.text.position.y = 50;
-     
-        this.addChild(this.text);
-
-     
-        this.visible = true;
-        this.scale.x = this.scale.y = 0;
-
-        this.animateIn = true;
-
-        // Add self to animation timer
-        globalTicker.add(this.animate);
-
-        ++this.winShown;
-    }
-    else
-    {
-        Events.Dispatcher.dispatchEvent(new Event("WIN_SPLASH_COMPLETE"));  
-    }
-};
 

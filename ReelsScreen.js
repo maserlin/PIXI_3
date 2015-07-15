@@ -100,6 +100,11 @@ ReelsScreen.prototype.onReelsStopped = function(){
 };
 
 ReelsScreen.prototype.onWinLinesComplete = function(){
-Events.Dispatcher.dispatchEvent(new Event("WIN_SPLASH_COMPLETE")); 
-//    this.winSplash.show(wins);
+    var wins = this.winCalculator.calculate(this.reelset.getReelMap());
+    if(wins.lines.length > 0){
+        this.winSplash.showTotal(wins);
+    }
+    else{
+        Events.Dispatcher.dispatchEvent(new Event("WIN_SPLASH_COMPLETE"));  
+    }
 };

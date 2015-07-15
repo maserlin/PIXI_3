@@ -130,6 +130,7 @@ Game.prototype.onSpinReels = function(event){
         console.log("Cheat button");
         this.cheat = [27,26,28,17,4];
         this.cheat = [13,13,5,25,1];
+        this.cheat = [29,26,27,25,31];
     }
     
     
