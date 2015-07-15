@@ -18,7 +18,7 @@ function ReelsScreen(reels_0)
     this.addChild(this.winSplash);
 
     // Manager: non-visual
-    this.winAnimator = new WinAnimator(this.winCalculator, this.winlines, this.winSplash);
+    this.winAnimator = new WinAnimator(this.reelset, this.winCalculator, this.winlines, this.winSplash);
 
     // Center ourselves onscreen
     this.pivot.x = this.width/2;

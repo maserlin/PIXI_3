@@ -128,3 +128,16 @@ Reelset.prototype.stopReels = function(timing, positions){
     }
 }
 
+
+/**
+ * 
+ * @param {Object} symbols: array of up to 5 (by reel) 
+ * giving 0, 1 or 2 of symbols in view to animate
+ */
+Reelset.prototype.animate = function(symbols){
+    for(var s=0; s<symbols.length; ++s){
+        this.reels[s].animateSymbol(symbols[s]);
+    }
+}
+
+

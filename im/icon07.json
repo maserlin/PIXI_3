@@ -1,0 +1,172 @@
+{"frames": {
+
+"Icon07_01.png":
+{
+	"frame": {"x":330,"y":422,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_03.png":
+{
+	"frame": {"x":494,"y":282,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_05.png":
+{
+	"frame": {"x":330,"y":282,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_07.png":
+{
+	"frame": {"x":166,"y":562,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_09.png":
+{
+	"frame": {"x":166,"y":422,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_11.png":
+{
+	"frame": {"x":166,"y":282,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_13.png":
+{
+	"frame": {"x":494,"y":142,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_15.png":
+{
+	"frame": {"x":330,"y":142,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_17.png":
+{
+	"frame": {"x":166,"y":142,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_19.png":
+{
+	"frame": {"x":2,"y":562,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_21_Hold.png":
+{
+	"frame": {"x":2,"y":422,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_69.png":
+{
+	"frame": {"x":2,"y":282,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_71.png":
+{
+	"frame": {"x":2,"y":142,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_73.png":
+{
+	"frame": {"x":494,"y":2,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_75.png":
+{
+	"frame": {"x":330,"y":2,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_77.png":
+{
+	"frame": {"x":166,"y":2,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_79.png":
+{
+	"frame": {"x":2,"y":2,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_81.png":
+{
+	"frame": {"x":330,"y":282,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_83.png":
+{
+	"frame": {"x":494,"y":282,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+},
+"Icon07_85.png":
+{
+	"frame": {"x":330,"y":422,"w":162,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":33,"w":162,"h":138},
+	"sourceSize": {"w":204,"h":204}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker ",
+	"version": "1.0",
+	"image": "icon07.png",
+	"format": "RGBA8888",
+	"size": {"w":702,"h":702},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ed83af6dfa93d24ea5d5dc428f8718b6:4a21677bc321ce9f3d6af903d919df29:83fc2bce3e647ad7be6890c1abf9cd91$"
+}
+}

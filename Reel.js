@@ -319,6 +319,14 @@ Reel.prototype.lift = function(){
 }
 
 /**
+ * Add 1 to ID to account for our top invisible symbol 
+ */
+Reel.prototype.animateSymbol = function(symbolId){
+    // console.log("Reel",this.id,"animating symbol",symbolId);
+    this.symbols[symbolId+1].animate();
+}
+
+/**
  * Symbols showing on reel 
  */
 Reel.prototype.symbolAt = function(index, reelband){

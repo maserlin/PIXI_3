@@ -12,7 +12,7 @@ function Winlines(winCalculator){
     this.symbolData = Reelset.symbolData;
 
     this.show = this.show.bind(this);
-    this.showNext = this.showNext.bind(this);
+    // this.showNext = this.showNext.bind(this);
     this.showLines = this.showLines.bind(this);
     this.showLineSummary = this.showLineSummary.bind(this);
     this.showWin = this.showWin.bind(this);
@@ -128,12 +128,14 @@ Winlines.prototype.showLines = function(lineIds){
     this.addChild(gfx);
     
     // Do not dispatch this if we are running the attractor
+/*
     if(!this.demoMode){
         var that = this;
         this.timeout = setTimeout(function(){
             that.onSummaryComplete();
         },1500);
     }
+*/
 };
 
 /**
@@ -175,8 +177,8 @@ Winlines.prototype.drawLine = function(gfx, lineId, dropShadowOffset){
 }
 
 /**
- * Show the next in the win sequence 
- */
+ * Show the next in the win sequence: when being managed by THIS  
+
 Winlines.prototype.showNext = function(){
     
     this.removeChildren();
@@ -188,6 +190,15 @@ Winlines.prototype.showNext = function(){
     else{
         Events.Dispatcher.dispatchEvent(new Event("WIN_LINES_COMPLETE"));
     }
+}
+ */
+/**
+ * Show the next in the win sequence: when being managed by WinAnimator
+ */
+Winlines.prototype.showNextWin = function(line, numSymbols){
+    
+    this.removeChildren();
+    this.showWin(line, numSymbols);
 }
 
 /**
@@ -211,7 +222,7 @@ Winlines.prototype.showWin = function(lineId, symbolsInWin){
 
     // 
     for(var s=0; s<symbolsInWin; ++s){
-        console.log("ShowWinBox on symbol, line " + lineId + " " + this.winCalculator.winlines[lineId][s]);  
+        // console.log("ShowWinBox on symbol, line " + lineId + " " + this.winCalculator.winlines[lineId][s]);  
         var reel = s;
         var symbol = this.winCalculator.winlines[lineId][s];
         this.drawBoundingBox(gfx, reel, symbol, dropShadowOffset);
@@ -225,7 +236,7 @@ Winlines.prototype.showWin = function(lineId, symbolsInWin){
     gfx.blendMode = PIXI.BLEND_MODES.NORMAL;
     
     for(var s=0; s<symbolsInWin; ++s){
-        console.log("ShowWinBox on symbol, line " + lineId + " " + this.winCalculator.winlines[lineId][s]);  
+        // console.log("ShowWinBox on symbol, line " + lineId + " " + this.winCalculator.winlines[lineId][s]);  
         var reel = s;
         var symbol = this.winCalculator.winlines[lineId][s];
         this.drawBoundingBox(gfx, reel, symbol);
@@ -236,12 +247,15 @@ Winlines.prototype.showWin = function(lineId, symbolsInWin){
     }
 
     this.addChild(gfx);
+/*
     
     var that = this;
     this.timeout = setTimeout(function(){
         that.removeChildren();
         that.timeout = setTimeout(that.showNext,500);
     },1500);
+*/
+
 }
 
 /**
@@ -287,7 +301,7 @@ Winlines.prototype.drawLink = function(gfx,reel,symbol,nextSymbol,dropShadowOffs
  * draws a single bounding box
  */
 Winlines.prototype.drawBoundingBox = function(gfx, reel, symbol, dropShadowOffset){
-    console.log("Draw bounding box " + reel + "," + symbol);
+    // console.log("Draw bounding box " + reel + "," + symbol);
     
     var xoff = dropShadowOffset == null ? 0 : dropShadowOffset.x;
     var yoff = dropShadowOffset == null ? 0 : dropShadowOffset.y;

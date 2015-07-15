@@ -23,6 +23,7 @@ function SpinSymbol(id){
     PIXI.extras.MovieClip.call(this, iconTextures);
 
     this.id = id;
+    this.isRoyal = this.id > 4 ? false : true;
     this.gotoAndStop(this.id);
     // console.log("Symbol set to " + this.id);
 
@@ -31,9 +32,18 @@ function SpinSymbol(id){
 SpinSymbol.prototype = Object.create(PIXI.extras.MovieClip.prototype);
 SpinSymbol.prototype.constructor = SpinSymbol;
 SpinSymbol.prototype.blur = false;
+SpinSymbol.prototype.isRoyal = true;
 
 
-
+SpinSymbol.prototype.animate = function(){
+    // console.log("Symbol id",this.id,"should animate!");
+    if(this.isRoyal){
+        
+    }
+    else{
+        
+    }
+}
 
 
 /**
@@ -50,6 +60,7 @@ SpinSymbol.prototype.setId = function(id, blur){
         this.id = id;
         if(this.blur)this.gotoAndStop(this.id+this.blurOffset);
         else this.gotoAndStop(this.id);
+        this.isRoyal = this.id > 4 ? false : true;
     }
 }
 
