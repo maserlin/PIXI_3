@@ -2,7 +2,7 @@ function ReelsScreen(reels_0)
 {
     PIXI.Container.call(this);
 
-    // non-visual component
+    // non-visual components
     this.winCalculator = new WinCalculator();
 
     // Reelset is a container which builds up the reels components in order:
@@ -12,10 +12,13 @@ function ReelsScreen(reels_0)
 
     this.winlines = new Winlines(this.winCalculator);
     this.addChild(this.winlines);
-
+    
     // Tell it where to draw relative to us
     this.winSplash = new WinSplash(new Point(this.width/2,this.height/2));
     this.addChild(this.winSplash);
+
+    // Manager: non-visual
+    this.winAnimator = new WinAnimator(this.winCalculator, this.winlines, this.winSplash);
 
     // Center ourselves onscreen
     this.pivot.x = this.width/2;
@@ -35,12 +38,11 @@ function ReelsScreen(reels_0)
     this.resize = this.resize.bind(this);
     Events.Dispatcher.addEventListener("RESIZE", this.resize);
     
-    this.onWinLinesComplete = this.onWinLinesComplete.bind(this);
-    Events.Dispatcher.addEventListener("WIN_LINES_COMPLETE", this.onWinLinesComplete);
 }
 ReelsScreen.prototype = Object.create(PIXI.Container.prototype);
 ReelsScreen.constructor = ReelsScreen;
 ReelsScreen.prototype.reelset = null;
+ReelsScreen.prototype.winData = null;
 ReelsScreen.prototype.winlines = null;
 ReelsScreen.prototype.winSplash = null;
 ReelsScreen.prototype.winCalculator = null;
@@ -95,16 +97,17 @@ ReelsScreen.prototype.onReelsSpinning = function(){
  * When all stopped show win summary, win highlights, etc etc 
  */
 ReelsScreen.prototype.onReelsStopped = function(){
-    var wins = this.winCalculator.calculate(this.reelset.getReelMap());
-    this.winlines.show(wins);
-};
+    this.winData = this.winCalculator.calculate(this.reelset.getReelMap());
+    
+    if(this.winData.lines.length > 0){
+        this.winAnimator.start(this.winData);
+    }
+    else {
+        Events.Dispatcher.dispatchEvent(new Event("WIN_DISPLAY_COMPLETE"));  
+    }
+}
 
-ReelsScreen.prototype.onWinLinesComplete = function(){
-    var wins = this.winCalculator.calculate(this.reelset.getReelMap());
-    if(wins.lines.length > 0){
-        this.winSplash.showTotal(wins);
-    }
-    else{
-        Events.Dispatcher.dispatchEvent(new Event("WIN_SPLASH_COMPLETE"));  
-    }
-};
+
+ReelsScreen.prototype.onWinAnimatorComplete = function(event){
+    Events.Dispatcher.dispatchEvent(new Event("WIN_DISPLAY_COMPLETE"));  
+}

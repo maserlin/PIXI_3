@@ -76,21 +76,8 @@ Game.prototype.onAssetsLoaded = function(obj){
     // a PIXI.Container: we can manage it as a single item. 
     this.layers[Game.BACKGROUND].addChild(this.gameBackground);
 
-    // WinSplash This is basically the win display layer: splash, winlines etc.
-    // Underneath it the reelset can swap in animating symbols etc (event driven).
-    // TODO What about if symbols have to pop out over the winlines?? May need a third layer to the 
-    // reelsScreen, but there may be issues with positioning!
-
-    // this.reelsScreen layers up the reelset and win display overlays and adds them as a single 
-    // component to the main display container
-    // TODO resizing for all reelsScreen components
-    // TODO winlines must be in register with the symbols!
+    // manages all reels game components
     this.reelsScreen = new ReelsScreen(reels_0);
-//    this.reelsScreen.addChild(this.reelset);
-    // this.winlines = new Winlines();
-    // this.reelsScreen.addChild(this.winlines);
-    // this.winSplash = new WinSplash();
-    // this.reelsScreen.addChild(this.winSplash);
 
     // Right now we want to show the ReelsScreen
     this.layers[Game.MAIN].addChild(this.reelsScreen);    
@@ -101,7 +88,7 @@ Game.prototype.onAssetsLoaded = function(obj){
      * TODO This should be a whole console component in an upper layer. 
      */
     this.spinButton = new SpinButton("Icon05_");
-    this.cheatButton = new SpinButton("Icon05_",500,100,"cheat");
+    this.cheatButton = new SpinButton("Icon05_",0,300,"cheat");
 
     // Everything built; bind listeners and their methods        
     this.onSpinReels = this.onSpinReels.bind(this);
@@ -110,14 +97,14 @@ Game.prototype.onAssetsLoaded = function(obj){
     Events.Dispatcher.addEventListener("STOP",this.onStopReels);
     
 
-    this.onWinSplashComplete = this.onWinSplashComplete.bind(this);
-    Events.Dispatcher.addEventListener("WIN_SPLASH_COMPLETE",this.onWinSplashComplete);    
+    this.onWinDisplayComplete = this.onWinDisplayComplete.bind(this);
+    Events.Dispatcher.addEventListener("WIN_DISPLAY_COMPLETE",this.onWinDisplayComplete);    
 
     //this.addExplosion()
 };
 
 
-Game.prototype.onWinSplashComplete = function(){
+Game.prototype.onWinDisplayComplete = function(){
     console.log("Wins complete");   
     this.spinButton.setState(SpinButton.IDLE);
 };
