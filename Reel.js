@@ -26,7 +26,7 @@ function Reel(reel, reelband){
     this.symbols = [];
     
     for(var i=0; i<5; ++i){
-        var s = new SpinSymbol(ids[i]);
+        var s = new AnimatedSymbol(ids[i]);
         s.position.x = 0;
         s.position.y = i * 140;
         this.addChild(s);
@@ -323,7 +323,7 @@ Reel.prototype.lift = function(){
  */
 Reel.prototype.animateSymbol = function(symbolId){
     // console.log("Reel",this.id,"animating symbol",symbolId);
-    this.symbols[symbolId+1].animate();
+    this.symbols[symbolId+1].animate(this);
 }
 
 /**

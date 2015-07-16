@@ -9,11 +9,11 @@ function SpinButton(imageName,posX,posY,name){
         var texture = PIXI.Texture.fromFrame(imageName + (i+1) + ".png");
         spinButtonTextures.push(texture);
     }
-    this.spinButton = new AnimatedSymbol(spinButtonTextures, 5);
+    this.spinButton = new PIXI.extras.MovieClip(spinButtonTextures);
     this.spinButton.position.x = posX || 100;
     this.spinButton.position.y = posY || 100;
     this.spinButton.anchor.x = this.spinButton.anchor.y = 0.5;
-    this.spinButton.animationSpeed = 0.2;
+    this.spinButton.animationSpeed = .2;
     this.spinButton.loop = false;
     this.spinButton.gotoAndPlay(0);
     this.spinButton.interactive = true;

@@ -35,16 +35,9 @@ SpinSymbol.prototype.blur = false;
 SpinSymbol.prototype.isRoyal = true;
 
 
-SpinSymbol.prototype.animate = function(){
-    // console.log("Symbol id",this.id,"should animate!");
-    if(this.isRoyal){
-        
-    }
-    else{
-        
-    }
+SpinSymbol.prototype.animate = function(container){
+    // --
 }
-
 
 /**
  * COULD use ".texture = nnn" and not use movie clip 

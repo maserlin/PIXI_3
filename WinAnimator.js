@@ -16,16 +16,36 @@ function WinAnimator(reelset, winCalculator, winlines, winSplash){
     this.onWinLinesComplete = this.onWinLinesComplete.bind(this);
     Events.Dispatcher.addEventListener("WIN_LINES_COMPLETE", this.onWinLinesComplete);
 
+    this.onSymbolAnimationComplete = this.onSymbolAnimationComplete.bind(this);
+    Events.Dispatcher.addEventListener("SYMBOL_ANIMATION_COMPLETE", this.onSymbolAnimationComplete);
+
     this.onWinSplashComplete = this.onWinSplashComplete.bind(this);
     Events.Dispatcher.addEventListener("WIN_SPLASH_COMPLETE", this.onWinSplashComplete);
+
+    this.onSpin = this.onSpin.bind(this);
+    Events.Dispatcher.addEventListener("SPIN", this.onSpin);
 }
 WinAnimator.prototype.winData = null;
 WinAnimator.prototype.reelset = null;
 WinAnimator.prototype.winCalculator = null;
 WinAnimator.prototype.winlines = null;
 WinAnimator.prototype.winSplash = null;
+WinAnimator.prototype.timeout = null;
 
 
+
+/**
+ * 
+ */
+WinAnimator.prototype.onSpin = function(){
+    clearTimeout(this.timeout);    
+}
+
+
+
+/**
+ * 
+ */
 WinAnimator.prototype.start = function(winData){
     this.winData = winData;
     
@@ -57,31 +77,36 @@ WinAnimator.prototype.onWinSummaryComplete = function(event){
 WinAnimator.prototype.showNext = function(){
     if(this.winShown < this.winData.lines.length){
         var lineId = this.winData.lines[this.winShown];
-        var numOfSymbols = this.winData.winline[this.winShown].length;        
-        console.log("Show",numOfSymbols,"symbols on line",lineId);
-        this.winlines.showNextWin(lineId, numOfSymbols);
+        this.numOfSymbols = this.winData.winline[this.winShown].length;        
+        console.log("Show",this.numOfSymbols,"symbols on line",lineId);
+        this.winlines.showNextWin(lineId, this.numOfSymbols);
         ++this.winShown;
         
         var symbols = [];
-        for(var s=0; s<numOfSymbols; ++s){
+        for(var s=0; s<this.numOfSymbols; ++s){
             symbols.push(this.winCalculator.winlines[lineId][s]);
         }
         console.log("animate symbols " + symbols)
         this.reelset.animate(symbols);
         
+    }    
+    else{
+        this.winSplash.showTotal(this.winData);
+    }
+};
+
+WinAnimator.prototype.onSymbolAnimationComplete = function(event){
+    if(--this.numOfSymbols == 0){
         var that = this;
         this.timeout = setTimeout(function(){
             that.winlines.removeChildren();
             that.timeout = setTimeout(function(){
                 that.showNext();
             },500);
-        },1500);
+        },250);
     
-    }    
-    else{
-        this.winSplash.showTotal(this.winData);
     }
-};
+}
 
 WinAnimator.prototype.onWinLinesComplete = function(event){
         this.winSplash.showTotal(this.winData);

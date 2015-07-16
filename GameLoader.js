@@ -36,7 +36,15 @@ GameLoader.prototype.loadAssets = function(callbackOnDone){
 
 
     this.callback = callbackOnDone || this.callback;
-    var assets = ["im/icon05.json","im/explosion.json","im/BlursNStills.json"];
+    var assets = ["im/icons_00_04.json",
+                  "im/icon05.json",
+                  "im/icon06.json",
+                  "im/icon07.json",
+                  "im/icon08.json",
+                  "im/icon09.json",
+                  "im/explosion.json",
+                  "im/BlursNStills.json"];
+    
     assets.push("im/bunny.png");
     assets.push("im/bg.jpg");
     this.add(assets);

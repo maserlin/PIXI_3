@@ -28,8 +28,8 @@ function WinSplash(position)
     this.hide = this.hide.bind(this);
     this.animate = this.animate.bind(this);
 
-    this.stop = this.stop.bind(this);
-    Events.Dispatcher.addEventListener("SPIN", this.stop);
+    this.onSpin = this.onSpin.bind(this);
+    Events.Dispatcher.addEventListener("SPIN", this.onSpin);
 };
 WinSplash.prototype = Object.create(PIXI.Container.prototype);
 WinSplash.prototype.constructor = WinSplash;
@@ -40,6 +40,16 @@ WinSplash.prototype.timeout = null;
 WinSplash.prototype.animateIn = true;
 WinSplash.prototype.winShown = 0;
 
+/*
+ * SPIN pressed: clear immediately and don't come back :) 
+ */
+WinSplash.prototype.onSpin = function(){
+    console.log("WinSplash onSpin")
+    clearTimeout(this.timeout);
+    globalTicker.remove(this.animate);
+    this.removeChild(this.text);
+    this.visible = false;
+};
 
 /*
  * Animate in 
@@ -127,16 +137,6 @@ WinSplash.prototype.showNextWin = function(){
 WinSplash.prototype.hide = function(){
     this.animateIn = false;
     globalTicker.add(this.animate);
-};
-
-/*
- * SPIN pressed: clear immediately and don't come back :) 
- */
-WinSplash.prototype.stop = function(){
-    clearTimeout(this.timeout);
-    globalTicker.remove(this.animate);
-    this.removeChild(this.text);
-    this.visible = false;
 };
 
 /**
