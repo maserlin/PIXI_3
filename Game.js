@@ -10,10 +10,17 @@ function Game(){
     this.rect = null;
     this.reelset = null;
 
+    this.vhost = new VirtualHost([reels_0,reels_1]);
     this.dataParser = new DataParser();
     var server = "http:\\\\10.32.10.24:8090\\PIXI";
-    this.serverProxy = new ServerProxy(server, this.dataParser, new VirtualHost());
+    this.serverProxy = new ServerProxy(server, this.dataParser, this.vhost);
+    
+    this.onInitResponseReceived = this.onInitResponseReceived.bind(this);
+    this.onBetResponseReceived = this.onBetResponseReceived.bind(this);
+    this.onBonusResponseReceived = this.onBonusResponseReceived.bind(this);
+    this.onReelsSpinning = this.onReelsSpinning.bind(this);
 
+    
     this.layers = [];
     this.layers[Game.BACKGROUND] = new PIXI.Container();
     this.layers[Game.MAIN] = new PIXI.Container();
@@ -25,6 +32,9 @@ Game.CONSOLE = "console";
 Game.prototype.layers = null;
 Game.prototype.reelsScreen = null;
 Game.prototype.bonusScreen = null;
+Game.prototype.currentScreen = null;
+Game.prototype.responseReceived = false;
+Game.prototype.reelsSpinning = false;
 
   
 /**
@@ -86,7 +96,8 @@ Game.prototype.onAssetsLoaded = function(obj){
     this.reelsScreen = new ReelsScreen(reels_0, this.winCalculator);
 
     // Right now we want to show the ReelsScreen
-    this.layers[Game.MAIN].addChild(this.reelsScreen);    
+    this.loadScreen = this.loadScreen.bind(this);
+    this.loadScreen(this.reelsScreen);
     
     /*
      * TODO This should be a whole console component in an upper layer. 
@@ -113,6 +124,14 @@ Game.prototype.onAssetsLoaded = function(obj){
     this.fadeOut = this.fadeOut.bind(this);
     this.fadeIn = this.fadeIn.bind(this);
 };
+
+/**
+ * 
+ */
+Game.prototype.loadScreen = function(screen){
+    this.layers[Game.MAIN].addChild(screen);
+    this.currentScreen = screen;    
+}
 
 /**
  * "START_BONUS"
@@ -143,7 +162,7 @@ Game.prototype.onReelsOut = function(){
     console.log("onReelsOut for Bonus");
     this.layers[Game.MAIN].removeChild(this.reelsScreen);    
     this.bonusScreen = new BonusScreen(this.winCalculator);
-    this.layers[Game.MAIN].addChild(this.bonusScreen);    
+    this.loadScreen(this.bonusScreen);    
 
     this.fadeScreen = this.bonusScreen;
     this.onFadedIn = this.bonusScreen.start;
@@ -159,7 +178,7 @@ Game.prototype.onBonusOut = function(){
     console.log("onBonusOut for Reels");
     this.bonusScreen.cleanUp();
     this.layers[Game.MAIN].removeChild(this.bonusScreen);    
-    this.layers[Game.MAIN].addChild(this.reelsScreen);    
+    this.loadScreen(this.reelsScreen);    
 
     this.fadeScreen = this.reelsScreen;
     this.onFadedIn = this.onWinDisplayComplete;
@@ -213,28 +232,64 @@ Game.prototype.onSpinReels = function(event){
         this.cheat = [1,0,0,0,0];
     }
     
+    /**
+     * TODO refactor all this to use proper XML & comms and use proper request data
+     */
     var req = Object.create(null);
     req.code = "BET";
     req.stake = 200;
     req.winlines = 20;
-    this.serverProxy.makeRequest(req);
+    
+    Events.Dispatcher.addEventListener(Event.VALID_RESPONSE_RECEIVED, this.onBetResponseReceived);
+    Events.Dispatcher.addEventListener(Event.ALL_REELS_SPINNING,this.onReelsSpinning);
+    this.responseReceived = false;
+    this.reelsSpinning = false;
+    
+    if(this.vhost){
+        this.vhost.createResponse(req,this.cheat);
+    }
+    else {
+        this.serverProxy.makeRequest(req);
+    }
 
     this.reelsScreen.spinReels([0,200,400,600,800]);
 };
 
 /**
+ * Don't STOP REELS unless they are all spinning AND result received 
+ */
+Game.prototype.onReelsSpinning = function(event){
+    Events.Dispatcher.removeEventListener(Event.ALL_REELS_SPINNING, this.onReelsSpinning);
+    this.reelsSpinning = true;
+    if(this.responseReceived)this.onStopReels();
+}
+
+/**
+ * Don't STOP REELS unless they are all spinning AND result received 
+ */
+Game.prototype.onBetResponseReceived = function(event){
+    Events.Dispatcher.removeEventListener(Event.VALID_RESPONSE_RECEIVED, this.onBetResponseReceived);
+    this.responseReceived = true;
+    if(this.reelsSpinning)this.onStopReels();
+}
+
+Game.prototype.onBonusResponseReceived = function(event){
+    this.bonusScreen.responseReceived();    
+}
+
+Game.prototype.onInitResponseReceived = function(event){
+    console.log("Init request received");
+}
+
+/**
  * 
  */
 Game.prototype.onStopReels = function(){
-    var rands = [];
-    for(var r=0; r<5; ++r){
-        rand = Math.floor(Math.random() * reels_0[r].length);
-        rands.push(rand);
-    }
-    if(this.cheat != null)rands = this.cheat;
-    console.log("call stop pos " + rands);
-    //rands = [8,31,26,4,6];
-    this.reelsScreen.stopReels([0,200,400,600,800],rands);
+
+    var stops = this.vhost.getReelStops();
+    console.log("call stop pos " + stops);
+
+    this.reelsScreen.stopReels([0,200,400,600,800],stops);
 };
 
 

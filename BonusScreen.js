@@ -29,6 +29,7 @@ BonusScreen.prototype.start = function(){
     console.log("Bonus screen START");
 }
 
+
 BonusScreen.prototype.cleanUp = function(){
     this.removeChildren();
 }

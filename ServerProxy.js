@@ -8,6 +8,7 @@
         this.virtualHost = virtualHost;
         
         this.receiveResponse = this.receiveResponse.bind(this);
+        this.receiveErrorResponse = this.receiveErrorResponse.bind(this);
         
         trace("Created ServerProxy");
     }
@@ -68,15 +69,6 @@
                 }
             }
             break;
-            
-            /*
-             * Balance request does not interfere with the 3 second timing. 
-             
-            case GameEvent.BalanceUpdateRequest:
-                this._requestData = this._dataParser.buildBalanceUpdateRequest();
-                //this._sendBalanceRequest();
-                break;
-            */
         }
         
     };
@@ -90,25 +82,18 @@
        // var server = wrapper.getGameEndpointUrl();
        console.log(this.server);
        
-       if(this.virtualHost)this.virtualHost.createResponse();
-       else this.objComms.doPost(this.server, this._requestData, this.receiveResponse);
+       // Post to server, wait for response       
+       this.objComms.doPost(this.server, this._requestData, this.receiveResponse, this.receiveErrorResponse);
               
         // Get new time of last bet.
         this._timeOfLastBet = new Date().getTime();
     };
     
-    /**
-     *
-     */
-    ServerProxy.prototype._sendBalanceRequest = function()
-    {   
-        var server = wrapper.getGameEndpointUrl();
-        this.objComms.doPost(server, this._requestData, this.receiveResponse);
-    };
     
     /**
      * 
-     * @param {Object} data: xml from server
+     * @param {Object} data: xml from server:
+     * listen for Event.VALID_RESPONSE_RECEIVED to pick up parsed data
      */
     ServerProxy.prototype.receiveResponse = function(responseData)
     {
@@ -117,10 +102,10 @@
         {
             if (  responseData.indexOf('noFunds') > 0  ) {
                 this.parsedResponse = "noFunds";
-            } else {
+            } 
+            else {
                 this.parsedResponse = "serverError";
             }
-
 
             this._eventManager.dispatchEvent(new Event(Event.INVALID_RESPONSE_RECEIVED));
         }
@@ -130,3 +115,8 @@
         }
     };
     
+    ServerProxy.prototype.receiveErrorResponse = function(responseData)
+    {
+        console.log("Received error response",responseData);
+        this._eventManager.dispatchEvent(new Event(Event.INVALID_RESPONSE_RECEIVED));
+    }

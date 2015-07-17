@@ -93,7 +93,7 @@ ReelsScreen.prototype.stopReels = function(timing, stopPos){
  * TODO Wait for actual result 
  */
 ReelsScreen.prototype.onReelsSpinning = function(){
-        Events.Dispatcher.dispatchEvent(new Event(Event.STOP));
+        // Events.Dispatcher.dispatchEvent(new Event(Event.STOP));
 };
 
 /**

@@ -134,10 +134,11 @@ function Comm(vhostIn) {
         this.doReq(notCached);
     };
 
-    this.doPost = function (url, dataPayload, handler, format) {
+    this.doPost = function (url, dataPayload, handler, errHandler, format) {
 		this.url = url;
         this.dataPayload = dataPayload;
         this.handleResp = handler;
+        if(errHandler)this.handleErr = errHandler;
         this.responseFormat = format || 'text';
         this.method = 'POST';
         this.doReq();
