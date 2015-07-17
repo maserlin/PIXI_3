@@ -41,7 +41,7 @@ document.body.appendChild(renderer.view);
 document.addEventListener("DOMContentLoaded", function init(){
   
   var gameLoader = new GameLoader();
-  Events.Dispatcher.addEventListener("ASSETS_LOADED", onAssetsLoaded);
+  Events.Dispatcher.addEventListener(Event.ASSETS_LOADED, onAssetsLoaded);
   gameLoader.loadAssets(onAssetsLoaded);
 
   // Start rendering
@@ -98,7 +98,7 @@ function onWindowResize(resizeEvent){
     var data = Object.create(null);
     data.size = size;
     data.scale = scale;
-    Events.Dispatcher.dispatchEvent( new Event("RESIZE",data));
+    Events.Dispatcher.dispatchEvent( new Event(Event.RESIZE,data));
 };
 
 /**

@@ -31,9 +31,9 @@ function SpinButton(imageName,posX,posY,name){
     }
 
     this.onAllReelsStopped = this.onAllReelsStopped.bind(this);
-    Events.Dispatcher.addEventListener("ALL_REELS_STOPPED",this.onAllReelsStopped);
+    Events.Dispatcher.addEventListener(Event.ALL_REELS_STOPPED,this.onAllReelsStopped);
     this.onAllReelsSpinning = this.onAllReelsSpinning.bind(this);
-    Events.Dispatcher.addEventListener("ALL_REELS_SPINNING",this.onAllReelsSpinning);
+    Events.Dispatcher.addEventListener(Event.ALL_REELS_SPINNING,this.onAllReelsSpinning);
 };
 SpinButton.prototype.name = null;
 
@@ -86,12 +86,12 @@ SpinButton.prototype.performStateAction = function(state){
             case SpinButton.IDLE:
                 this.state = SpinButton.SPIN;
                 // Listened to by Game to provide timings
-                Events.Dispatcher.dispatchEvent(new Event("SPIN",this));
+                Events.Dispatcher.dispatchEvent(new Event(Event.SPIN,this));
                 break;
             case SpinButton.SPIN:
                 this.state = SpinButton.STOP;
                 // Listened to by Game to provide timings and stopPositions
-                Events.Dispatcher.dispatchEvent(new Event("STOP",this));
+                Events.Dispatcher.dispatchEvent(new Event(Event.STOP,this));
                 break;
             case SpinButton.STOP:
                 break;

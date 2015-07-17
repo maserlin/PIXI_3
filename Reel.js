@@ -176,7 +176,7 @@ Reel.prototype.bounceReel = function(){
         }
         this.state = Reel.IDLE;
         //console.log("IDLE " + this.symbolsInView())
-        Events.Dispatcher.dispatchEvent(new Event("REEL_STOPPED", this.id));
+        Events.Dispatcher.dispatchEvent(new Event(Event.REEL_STOPPED, this.id));
         
         globalTicker.remove(this.animate);
     }
@@ -338,7 +338,7 @@ Reel.prototype.lift = function(){
     }
     if(this.symbols[1].position.y < this.frameTop/3*2){
         this.state = Reel.SPINNING;
-        Events.Dispatcher.dispatchEvent(new Event("REEL_SPINNING",this.id));
+        Events.Dispatcher.dispatchEvent(new Event(Event.REEL_SPINNING,this.id));
     }
 }
 

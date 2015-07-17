@@ -122,11 +122,11 @@
             }
 
 
-            this._eventManager.dispatchEvent(new Event("INVALID_RESPONSE_RECEIVED"));
+            this._eventManager.dispatchEvent(new Event(Event.INVALID_RESPONSE_RECEIVED));
         }
         else
         {
-            this._eventManager.dispatchEvent(new Event("VALID_RESPONSE_RECEIVED"));
+            this._eventManager.dispatchEvent(new Event(Event.VALID_RESPONSE_RECEIVED));
         }
     };
     

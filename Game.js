@@ -97,18 +97,18 @@ Game.prototype.onAssetsLoaded = function(obj){
     // Everything built; bind listeners and their methods        
     this.onSpinReels = this.onSpinReels.bind(this);
     this.onStopReels = this.onStopReels.bind(this);
-    Events.Dispatcher.addEventListener("SPIN",this.onSpinReels);
-    Events.Dispatcher.addEventListener("STOP",this.onStopReels);
+    Events.Dispatcher.addEventListener(Event.SPIN,this.onSpinReels);
+    Events.Dispatcher.addEventListener(Event.STOP,this.onStopReels);
     
 
     this.onWinDisplayComplete = this.onWinDisplayComplete.bind(this);
-    Events.Dispatcher.addEventListener("WIN_DISPLAY_COMPLETE",this.onWinDisplayComplete);    
+    Events.Dispatcher.addEventListener(Event.WIN_DISPLAY_COMPLETE,this.onWinDisplayComplete);    
 
     this.onStartBonus = this.onStartBonus.bind(this);
-    Events.Dispatcher.addEventListener("START_BONUS",this.onStartBonus);    
+    Events.Dispatcher.addEventListener(Event.BONUS_START,this.onStartBonus);    
 
     this.onBonusComplete = this.onBonusComplete.bind(this);
-    Events.Dispatcher.addEventListener("BONUS_COMPLETE",this.onBonusComplete);    
+    Events.Dispatcher.addEventListener(Event.BONUS_COMPLETE,this.onBonusComplete);    
 
     this.fadeOut = this.fadeOut.bind(this);
     this.fadeIn = this.fadeIn.bind(this);

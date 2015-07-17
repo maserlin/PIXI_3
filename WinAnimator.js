@@ -11,19 +11,19 @@ function WinAnimator(reelset, winCalculator, winlines, winSplash){
     this.showNext = this.showNext.bind(this);
 
     this.onWinSummaryComplete = this.onWinSummaryComplete.bind(this);
-    Events.Dispatcher.addEventListener("WIN_SUMMARY_COMPLETE", this.onWinSummaryComplete);
+    Events.Dispatcher.addEventListener(Event.WIN_SUMMARY_COMPLETE, this.onWinSummaryComplete);
 
     this.onWinLinesComplete = this.onWinLinesComplete.bind(this);
-    Events.Dispatcher.addEventListener("WIN_LINES_COMPLETE", this.onWinLinesComplete);
+    Events.Dispatcher.addEventListener(Event.WIN_LINES_COMPLETE, this.onWinLinesComplete);
 
     this.onSymbolAnimationComplete = this.onSymbolAnimationComplete.bind(this);
-    Events.Dispatcher.addEventListener("SYMBOL_ANIMATION_COMPLETE", this.onSymbolAnimationComplete);
+    Events.Dispatcher.addEventListener(Event.SYMBOL_ANIMATION_COMPLETE, this.onSymbolAnimationComplete);
 
     this.onWinSplashComplete = this.onWinSplashComplete.bind(this);
-    Events.Dispatcher.addEventListener("WIN_SPLASH_COMPLETE", this.onWinSplashComplete);
+    Events.Dispatcher.addEventListener(Event.WIN_SPLASH_COMPLETE, this.onWinSplashComplete);
 
     this.onSpin = this.onSpin.bind(this);
-    Events.Dispatcher.addEventListener("SPIN", this.onSpin);
+    Events.Dispatcher.addEventListener(Event.SPIN, this.onSpin);
 }
 WinAnimator.prototype.winData = null;
 WinAnimator.prototype.reelset = null;
@@ -113,6 +113,6 @@ WinAnimator.prototype.onWinLinesComplete = function(event){
 };
 
 WinAnimator.prototype.onWinSplashComplete = function(event){
-    Events.Dispatcher.dispatchEvent(new Event("WIN_ANIMATOR_COMPLETE"));  
+    Events.Dispatcher.dispatchEvent(new Event(Event.WIN_ANIMATOR_COMPLETE));  
 }
 

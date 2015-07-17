@@ -21,7 +21,7 @@ function Winlines(winCalculator){
     // this.showWin(5,5);
     
     this.onSpin = this.onSpin.bind(this);
-    Events.Dispatcher.addEventListener("SPIN", this.onSpin);
+    Events.Dispatcher.addEventListener(Event.SPIN, this.onSpin);
     
     this.colours = [0xfe3f3f,0xfec53f,0x8c3f87,0xfe3cb0,0xd88c3f,
     0x65fe8c,0xfe8c3f,0xb23ffe,0xb0b0fe,0xb03c3c,
@@ -144,7 +144,7 @@ Winlines.prototype.showLines = function(lineIds){
 Winlines.prototype.onSummaryComplete = function(){
     this.removeChildren();
         this.timeout = setTimeout(function(){
-            Events.Dispatcher.dispatchEvent(new Event("WIN_SUMMARY_COMPLETE"));
+            Events.Dispatcher.dispatchEvent(new Event(Event.WIN_SUMMARY_COMPLETE));
         },300);
 }
 
@@ -188,7 +188,7 @@ Winlines.prototype.showNext = function(){
         ++this.winShown;
     }    
     else{
-        Events.Dispatcher.dispatchEvent(new Event("WIN_LINES_COMPLETE"));
+        Events.Dispatcher.dispatchEvent(new Event(Event.WIN_LINES_COMPLETE));
     }
 }
  */

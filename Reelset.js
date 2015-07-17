@@ -43,10 +43,10 @@ function Reelset(reelband){
     this.stopReels = this.stopReels.bind(this);
 
     this.onReelStopped = this.onReelStopped.bind(this);
-    Events.Dispatcher.addEventListener("REEL_STOPPED",this.onReelStopped);
+    Events.Dispatcher.addEventListener(Event.REEL_STOPPED,this.onReelStopped);
 
     this.onReelSpinning = this.onReelSpinning.bind(this);
-    Events.Dispatcher.addEventListener("REEL_SPINNING",this.onReelSpinning);
+    Events.Dispatcher.addEventListener(Event.REEL_SPINNING,this.onReelSpinning);
     
     this.setSymbolData = this.setSymbolData.bind(this);
     this.setSymbolData();
@@ -75,7 +75,7 @@ Reelset.prototype.setSymbolData = function(){
 Reelset.prototype.onReelSpinning = function(event){
     if(event.data == 4)
     {
-        Events.Dispatcher.dispatchEvent(new Event("ALL_REELS_SPINNING"));
+        Events.Dispatcher.dispatchEvent(new Event(Event.ALL_REELS_SPINNING));
     }
 }
 
@@ -89,7 +89,7 @@ Reelset.prototype.onReelStopped = function(event){
         for(var reel in this.reels){
             this.reelMap.push(this.reels[reel].symbolsInView());
         }        
-        Events.Dispatcher.dispatchEvent(new Event("ALL_REELS_STOPPED"));
+        Events.Dispatcher.dispatchEvent(new Event(Event.ALL_REELS_STOPPED));
     }
 }
 

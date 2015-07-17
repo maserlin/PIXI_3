@@ -92,7 +92,7 @@ AnimatedSymbol.prototype.animate = function(container){
         var that = this;
         this.movieClip.onComplete = function(){
             that.container.removeChild(that.movieClip);
-            Events.Dispatcher.dispatchEvent(new Event("SYMBOL_ANIMATION_COMPLETE"));
+            Events.Dispatcher.dispatchEvent(new Event(Event.SYMBOL_ANIMATION_COMPLETE));
         }
     
     console.log("WTF")

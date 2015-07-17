@@ -11,10 +11,10 @@ function Console()
     this.enable = this.enable.bind(this);
     
     this.disable = this.disable.bind(this);
-    Events.Dispatcher.addEventListener("SPIN",this.disable);
+    Events.Dispatcher.addEventListener(Event.SPIN,this.disable);
 
     this.resize = this.resize.bind(this);
-    Events.Dispatcher.addEventListener("RESIZE", this.resize);
+    Events.Dispatcher.addEventListener(Event.RESIZE, this.resize);
 }
 Console.prototype = Object.create(PIXI.Container.prototype);
 Console.constructor = Console;

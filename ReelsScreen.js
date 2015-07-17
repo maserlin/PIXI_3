@@ -27,19 +27,19 @@ function ReelsScreen(reels_0, winCalculator)
     this.position.y = getWindowBounds().y/2;
 
     this.onReelsSpinning = this.onReelsSpinning.bind(this);
-    Events.Dispatcher.addEventListener("ALL_REELS_SPINNING",this.onReelsSpinning);
+    Events.Dispatcher.addEventListener(Event.ALL_REELS_SPINNING,this.onReelsSpinning);
 
     this.onReelsStopped = this.onReelsStopped.bind(this);
-    Events.Dispatcher.addEventListener("ALL_REELS_STOPPED",this.onReelsStopped);
+    Events.Dispatcher.addEventListener(Event.ALL_REELS_STOPPED,this.onReelsStopped);
 
     this.spinReels = this.spinReels.bind(this);
     this.stopReels = this.stopReels.bind(this);
 
     this.onWinAnimatorComplete = this.onWinAnimatorComplete.bind(this);
-    Events.Dispatcher.addEventListener("WIN_ANIMATOR_COMPLETE",this.onWinAnimatorComplete);
+    Events.Dispatcher.addEventListener(Event.WIN_ANIMATOR_COMPLETE,this.onWinAnimatorComplete);
 
     this.resize = this.resize.bind(this);
-    Events.Dispatcher.addEventListener("RESIZE", this.resize);
+    Events.Dispatcher.addEventListener(Event.RESIZE, this.resize);
     
 }
 ReelsScreen.prototype = Object.create(PIXI.Container.prototype);
@@ -93,7 +93,7 @@ ReelsScreen.prototype.stopReels = function(timing, stopPos){
  * TODO Wait for actual result 
  */
 ReelsScreen.prototype.onReelsSpinning = function(){
-        Events.Dispatcher.dispatchEvent(new Event("STOP"));
+        Events.Dispatcher.dispatchEvent(new Event(Event.STOP));
 };
 
 /**
@@ -106,19 +106,19 @@ ReelsScreen.prototype.onReelsStopped = function(){
         this.winAnimator.start(this.winData);
     }
     else if(this.winData.bonus){
-        Events.Dispatcher.dispatchEvent(new Event("START_BONUS"));  
+        Events.Dispatcher.dispatchEvent(new Event(Event.BONUS_START));  
     }
     else {
-        Events.Dispatcher.dispatchEvent(new Event("WIN_DISPLAY_COMPLETE"));  
+        Events.Dispatcher.dispatchEvent(new Event(Event.WIN_DISPLAY_COMPLETE));  
     }
 }
 
 
 ReelsScreen.prototype.onWinAnimatorComplete = function(event){
     if(this.winData.bonus){
-        Events.Dispatcher.dispatchEvent(new Event("START_BONUS"));  
+        Events.Dispatcher.dispatchEvent(new Event(Event.BONUS_START));  
     }
     else {
-        Events.Dispatcher.dispatchEvent(new Event("WIN_DISPLAY_COMPLETE"));  
+        Events.Dispatcher.dispatchEvent(new Event(Event.WIN_DISPLAY_COMPLETE));  
     }
 }

@@ -109,7 +109,7 @@ GameLoader.prototype.onAssetsLoaded = function(data){
     }
 //    this.callback();
     
-    Events.Dispatcher.dispatchEvent(new Event("ASSETS_LOADED"));
+    Events.Dispatcher.dispatchEvent(new Event(Event.ASSETS_LOADED));
     
 }
 

@@ -22,7 +22,7 @@ function GameBackground(imageUrls){
     
     // Set resizing
     this.resize = this.resize.bind(this);
-    Events.Dispatcher.addEventListener("RESIZE", this.resize);
+    Events.Dispatcher.addEventListener(Event.RESIZE, this.resize);
 
     this.change = this.change.bind(this);
     this.swap = this.swap.bind(this);

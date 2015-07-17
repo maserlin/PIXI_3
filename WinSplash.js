@@ -29,7 +29,7 @@ function WinSplash(position)
     this.animate = this.animate.bind(this);
 
     this.onSpin = this.onSpin.bind(this);
-    Events.Dispatcher.addEventListener("SPIN", this.onSpin);
+    Events.Dispatcher.addEventListener(Event.SPIN, this.onSpin);
 };
 WinSplash.prototype = Object.create(PIXI.Container.prototype);
 WinSplash.prototype.constructor = WinSplash;
@@ -127,7 +127,7 @@ WinSplash.prototype.showNextWin = function(){
     }
     else
     {
-        Events.Dispatcher.dispatchEvent(new Event("WIN_SPLASH_COMPLETE"));  
+        Events.Dispatcher.dispatchEvent(new Event(Event.WIN_SPLASH_COMPLETE));  
     }
 };
 

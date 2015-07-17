@@ -77,7 +77,7 @@ BonusScreen.prototype.showWin = function(position){
 
 BonusScreen.prototype.onComplete = function(){
     setTimeout(function(){
-        Events.Dispatcher.dispatchEvent(new Event("BONUS_COMPLETE"));
+        Events.Dispatcher.dispatchEvent(new Event(Event.BONUS_COMPLETE));
     },3000);
 }
 

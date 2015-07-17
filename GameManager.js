@@ -16,7 +16,7 @@ function GameManager(){
     this.serverProxy = new ServerProxy(server, this.dataParser);
     
     this.onBetEvent = this.onBetEvent.bind(this);
-    Events.Dispatcher.addEventListener("BET", this.onBetEvent);
+    Events.Dispatcher.addEventListener(Event.BET, this.onBetEvent);
     
     this.onGameComplete = this.onGameComplete.bind(this);
 
@@ -82,7 +82,7 @@ GameManager.prototype.onAssetsLoaded = function(obj){
     this.console = new Console(this.layers[GameManager.CONSOLE]);
     this.spinButton = this.console.spinButton;
     
-    Events.Dispatcher.addEventListener("GAME_COMPLETE", this.onGameComplete);
+    Events.Dispatcher.addEventListener(Event.GAME_COMPLETE, this.onGameComplete);
         
 
     //this.addExplosion()
