@@ -32,6 +32,14 @@ function Reel(reel, reelband){
         this.addChild(s);
         this.symbols.push(s);
     }
+    
+    // Draw bonus symbol again (on top)        
+    for(var s in this.symbols){
+        if(ids[s] == 11){
+            this.addChild(this.symbols[s]);
+            break;
+        }
+    }
 
     this.frameTop = this.symbols[1].position.y;
     
@@ -195,6 +203,13 @@ Reel.prototype.setReel = function(){
             this.symbols[s].position.y -= offset;
             this.symbols[s].setId(ids[s],this.blur);
         }
+        // Draw bonus symbol again (on top)        
+        for(var s in this.symbols){
+            if(ids[s] == 11){
+                this.addChild(this.symbols[s]);
+                break;
+            }
+        }
         
         /*
          * Set new symbols. each time in set more to the new ones, from the top of the reels
@@ -273,8 +288,17 @@ Reel.prototype.stopReel = function(){
         this.index = this.getWrappedIndex(this.stopPos);
         this.reelband = this.newReelband;
         var ids = this.symbolsOnReel();
+        
         for(var s in this.symbols){
             this.symbols[s].setId(ids[s],this.blur);
+        }
+        
+        // Draw bonus symbol again (on top)        
+        for(var s in this.symbols){
+            if(ids[s] == 11){
+                this.addChild(this.symbols[s]);
+                break;
+            }
         }
 
         this.state = Reel.BOUNCING;
@@ -335,7 +359,7 @@ Reel.prototype.symbolAt = function(index, reelband){
 }
 
 /**
- * Symbols showing on reel 
+ * Get Ids of symbols showing on reel 
  */
 Reel.prototype.symbolsInView = function(){
     var symbols = [];
@@ -348,7 +372,7 @@ Reel.prototype.symbolsInView = function(){
 }
 
 /**
- * All 5 symbols on reel 
+ * Get Ids of all 5 symbols on reel 
  */
 Reel.prototype.symbolsOnReel = function(){
     var symbols = [];

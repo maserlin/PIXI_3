@@ -1,9 +1,11 @@
     
-    function ServerProxy(server, dataParser){
+    function ServerProxy(server, dataParser, virtualHost){
         this._eventManager = Events.Dispatcher;
         this._dataParser = dataParser;
         this.server = server;
         this.objComms = new Comm();
+        
+        this.virtualHost = virtualHost;
         
         this.receiveResponse = this.receiveResponse.bind(this);
         
@@ -87,7 +89,9 @@
         //trace("Sending request after",((new Date().getTime() - this._timeOfLastBet)/1000),"seconds")
        // var server = wrapper.getGameEndpointUrl();
        console.log(this.server);
-        this.objComms.doPost(this.server, this._requestData, this.receiveResponse);
+       
+       if(this.virtualHost)this.virtualHost.createResponse();
+       else this.objComms.doPost(this.server, this._requestData, this.receiveResponse);
               
         // Get new time of last bet.
         this._timeOfLastBet = new Date().getTime();

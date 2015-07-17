@@ -113,6 +113,6 @@ WinAnimator.prototype.onWinLinesComplete = function(event){
 };
 
 WinAnimator.prototype.onWinSplashComplete = function(event){
-    Events.Dispatcher.dispatchEvent(new Event("WIN_DISPLAY_COMPLETE"));  
+    Events.Dispatcher.dispatchEvent(new Event("WIN_ANIMATOR_COMPLETE"));  
 }
 

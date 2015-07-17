@@ -1,9 +1,9 @@
-function ReelsScreen(reels_0)
+function ReelsScreen(reels_0, winCalculator)
 {
     PIXI.Container.call(this);
 
     // non-visual components
-    this.winCalculator = new WinCalculator();
+    this.winCalculator = winCalculator;
 
     // Reelset is a container which builds up the reels components in order:
     // ReelBg, Reels x5, a mask for clipping the top and bottom, and reelFg overlay   
@@ -34,6 +34,9 @@ function ReelsScreen(reels_0)
 
     this.spinReels = this.spinReels.bind(this);
     this.stopReels = this.stopReels.bind(this);
+
+    this.onWinAnimatorComplete = this.onWinAnimatorComplete.bind(this);
+    Events.Dispatcher.addEventListener("WIN_ANIMATOR_COMPLETE",this.onWinAnimatorComplete);
 
     this.resize = this.resize.bind(this);
     Events.Dispatcher.addEventListener("RESIZE", this.resize);
@@ -102,6 +105,9 @@ ReelsScreen.prototype.onReelsStopped = function(){
     if(this.winData.lines.length > 0){
         this.winAnimator.start(this.winData);
     }
+    else if(this.winData.bonus){
+        Events.Dispatcher.dispatchEvent(new Event("START_BONUS"));  
+    }
     else {
         Events.Dispatcher.dispatchEvent(new Event("WIN_DISPLAY_COMPLETE"));  
     }
@@ -109,5 +115,10 @@ ReelsScreen.prototype.onReelsStopped = function(){
 
 
 ReelsScreen.prototype.onWinAnimatorComplete = function(event){
-    Events.Dispatcher.dispatchEvent(new Event("WIN_DISPLAY_COMPLETE"));  
+    if(this.winData.bonus){
+        Events.Dispatcher.dispatchEvent(new Event("START_BONUS"));  
+    }
+    else {
+        Events.Dispatcher.dispatchEvent(new Event("WIN_DISPLAY_COMPLETE"));  
+    }
 }

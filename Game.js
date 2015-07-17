@@ -7,13 +7,12 @@
 function Game(){
     this.gameBackground = null;
     this.bunny = null;
-    this.spinButton = null;
     this.rect = null;
     this.reelset = null;
 
     this.dataParser = new DataParser();
     var server = "http:\\\\10.32.10.24:8090\\PIXI";
-    this.serverProxy = new ServerProxy(server, this.dataParser);
+    this.serverProxy = new ServerProxy(server, this.dataParser, new VirtualHost());
 
     this.layers = [];
     this.layers[Game.BACKGROUND] = new PIXI.Container();
@@ -31,11 +30,12 @@ Game.prototype.bonusScreen = null;
 /**
  * TODO proper config  
  */
-var reels_0 = [ [7,5,3,2,0,1,3,0,2,4,5,6,7,0,4,1,0,2,3,1,8,2,4,1,0,3,2,1,0,4,6,5,1],
-                [1,4,5,1,6,5,0,2,1,0,3,4,0,2,3,7,6,1,4,0,3,1,2,6,7,2,1,0,4,1,0,0,3],
-                [6,1,7,5,3,0,4,1,6,5,0,1,2,0,3,2,1,3,8,2,9,8,4,0,1,3,0,2,1,4,2,5,7],
-                [0,3,2,4,1,0,3,2,0,4,3,0,1,0,2,3,0,7,6,5,1,6,5,7,2,1,0,4,1,0,0,2,1],
-                [0,8,4,0,1,8,0,2,0,1,3,0,4,2,0,1,3,2,6,7,5,1,7,5,6,1,0,3,1,0,4,2,0] ];
+var reels_0 = [ [7,5,3,2,0,1,3,0,2,2,0,1,3,0,2,4,5,6,7,0,4,1,0,2,3,1,8,2,4,1,0,3,2,1,0,4,6,5,7,5,3,2,4,5,6,7,8,9,8,7,6,5,1],
+                [1,4,5,1,6,5,0,2,1,2,0,1,3,0,2,0,3,4,0,2,3,7,6,1,4,0,3,1,2,6,7,2,1,0,4,1,0,0,7,5,3,2,4,5,6,7,8,9,8,7,6,5,3],
+                [11,1,7,5,3,0,4,1,2,0,1,3,0,2,6,5,0,1,2,0,3,2,1,3,8,2,9,8,4,0,1,3,0,2,1,4,2,5,7,5,3,2,4,5,6,7,8,9,8,7,6,5,7],
+                [0,3,2,4,1,0,3,2,0,4,3,0,1,0,2,2,0,1,3,0,2,3,0,7,6,5,1,6,5,7,2,1,0,4,1,0,0,2,7,5,3,2,4,5,6,7,8,9,8,7,6,5,1],
+                [0,8,4,0,1,8,0,2,0,1,3,0,4,2,2,0,1,3,0,2,0,1,3,2,6,7,5,1,7,5,6,1,0,3,1,0,4,2,7,5,3,2,4,5,6,7,8,9,8,7,6,5,0] ];
+                
 var reels_1 = [ [7,5,3,2,4,5,6,7,8,9,8,7,6,5,4,5,6,7,8,9,8,7,6,5,6,7,8,9,8,4,6,5,1],
                 [7,5,3,2,4,5,6,7,8,9,8,7,6,5,4,5,6,7,8,9,8,7,6,5,6,7,8,9,8,4,6,5,1],
                 [7,5,3,2,4,5,6,7,8,9,8,7,6,5,4,5,6,7,8,9,8,7,6,5,6,7,8,9,8,4,6,5,1],
@@ -73,6 +73,7 @@ Game.prototype.onAssetsLoaded = function(obj){
     // For all UI components
     stage.addChild(this.layers[Game.CONSOLE]);
 
+    this.winCalculator = new WinCalculator();
 
     // Create a background manager with a couple of images to play with.
     this.gameBackground = new GameBackground(["im/bg.jpg","im/bg2.jpg"]);
@@ -82,18 +83,16 @@ Game.prototype.onAssetsLoaded = function(obj){
     this.layers[Game.BACKGROUND].addChild(this.gameBackground);
 
     // manages all reels game components
-    this.reelsScreen = new ReelsScreen(reels_1);
+    this.reelsScreen = new ReelsScreen(reels_0, this.winCalculator);
 
     // Right now we want to show the ReelsScreen
     this.layers[Game.MAIN].addChild(this.reelsScreen);    
     
-    
-    
     /*
      * TODO This should be a whole console component in an upper layer. 
      */
-    this.spinButton = new SpinButton("Icon05_");
-    this.cheatButton = new SpinButton("Icon05_",0,300,"cheat");
+    this.console = new Console();
+    this.layers[Game.MAIN].addChild(this.console);    
 
     // Everything built; bind listeners and their methods        
     this.onSpinReels = this.onSpinReels.bind(this);
@@ -105,26 +104,114 @@ Game.prototype.onAssetsLoaded = function(obj){
     this.onWinDisplayComplete = this.onWinDisplayComplete.bind(this);
     Events.Dispatcher.addEventListener("WIN_DISPLAY_COMPLETE",this.onWinDisplayComplete);    
 
-    //this.addExplosion()
+    this.onStartBonus = this.onStartBonus.bind(this);
+    Events.Dispatcher.addEventListener("START_BONUS",this.onStartBonus);    
+
+    this.onBonusComplete = this.onBonusComplete.bind(this);
+    Events.Dispatcher.addEventListener("BONUS_COMPLETE",this.onBonusComplete);    
+
+    this.fadeOut = this.fadeOut.bind(this);
+    this.fadeIn = this.fadeIn.bind(this);
 };
 
+/**
+ * "START_BONUS"
+ */
+Game.prototype.onStartBonus = function(){
+    console.log("Start Bonus");
+    this.gameBackground.change(GameBackground.REELS_BG,GameBackground.BONUS_BG);
+    this.fadeScreen = this.reelsScreen;
+    this.onFadedOut = this.onReelsOut;
+    globalTicker.add(this.fadeOut);
+};
 
+/**
+ * "BONUS_COMPLETE"
+ */
+Game.prototype.onBonusComplete = function(){
+    console.log("Bonus Complete");
+    this.gameBackground.change(GameBackground.BONUS_BG,GameBackground.REELS_BG);
+    this.fadeScreen = this.bonusScreen;
+    this.onFadedOut = this.onBonusOut;
+    globalTicker.add(this.fadeOut);
+};
+
+/**
+ * "REELS_OUT"
+ */
+Game.prototype.onReelsOut = function(){
+    console.log("onReelsOut for Bonus");
+    this.layers[Game.MAIN].removeChild(this.reelsScreen);    
+    this.bonusScreen = new BonusScreen(this.winCalculator);
+    this.layers[Game.MAIN].addChild(this.bonusScreen);    
+
+    this.fadeScreen = this.bonusScreen;
+    this.onFadedIn = this.bonusScreen.start;
+    globalTicker.add(this.fadeIn);
+
+    this.fadeIn(this.bonusScreen);
+};
+
+/**
+ * "BONUS_OUT"
+ */
+Game.prototype.onBonusOut = function(){
+    console.log("onBonusOut for Reels");
+    this.bonusScreen.cleanUp();
+    this.layers[Game.MAIN].removeChild(this.bonusScreen);    
+    this.layers[Game.MAIN].addChild(this.reelsScreen);    
+
+    this.fadeScreen = this.reelsScreen;
+    this.onFadedIn = this.onWinDisplayComplete;
+    globalTicker.add(this.fadeIn);
+
+    this.fadeIn(this.bonusScreen);
+};
+
+Game.prototype.fadeOut = function(){
+    if(this.fadeScreen.alpha > 0.05){
+        this.fadeScreen.alpha -= 0.05;
+    }
+    else {
+        globalTicker.remove(this.fadeOut);
+        this.fadeScreen.alpha = 0;
+        this.onFadedOut();
+    }
+}
+
+Game.prototype.fadeIn = function(screen){
+    if(this.fadeScreen.alpha < 1){
+        this.fadeScreen.alpha += 0.05;
+    }
+    else {
+        globalTicker.remove(this.fadeIn);
+        this.fadeScreen.alpha = 1;
+        this.onFadedIn();
+    }
+}
+
+
+
+
+/**
+ * "WIN_DISPLAY_COMPLETE"
+ */
 Game.prototype.onWinDisplayComplete = function(){
-    console.log("Wins complete");   
-    this.spinButton.setState(SpinButton.IDLE);
+    console.log("Wins complete");
+    this.console.enable();
 };
 
-
+/**
+ * 
+ */
 Game.prototype.onSpinReels = function(event){
     console.log("call spin");
     this.cheat = null;
     if(event.data.name == "cheat"){
         console.log("Cheat button");
-        this.cheat = [27,26,28,17,4];
-        this.cheat = [13,13,5,25,1];
         this.cheat = [29,26,27,25,31];
+        this.cheat = [1,0,0,0,0];
     }
-    
     
     var req = Object.create(null);
     req.code = "BET";
@@ -135,6 +222,9 @@ Game.prototype.onSpinReels = function(event){
     this.reelsScreen.spinReels([0,200,400,600,800]);
 };
 
+/**
+ * 
+ */
 Game.prototype.onStopReels = function(){
     var rands = [];
     for(var r=0; r<5; ++r){

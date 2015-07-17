@@ -24,19 +24,45 @@ function WinCalculator(){
   this.wins.winline = [];
   this.wins.lines = [];
   this.wins.winAmount = [];
+  this.wins.bonus = null;
 };
 
 WinCalculator.WILD = 9;
+WinCalculator.BONUS = 11;
+
+WinCalculator.prototype.getBonusWins = function(){
+    return this.wins.bonus.wins.slice(0);
+}
 
 /**
  * 
  */
 WinCalculator.prototype.calculate = function(reelMap){
   console.log("WinCalculator calc " + reelMap);  
+  
   this.wins = Object.create(null);
   this.wins.winline = [];
   this.wins.lines = [];
   this.wins.winAmount = [];
+  this.wins.bonus = null;
+  
+  for(var r=0; r<reelMap.length; ++r)
+  {
+      for(var s=0; s<reelMap[r].length; ++s)
+      {
+          if(reelMap[r][s] == WinCalculator.BONUS){
+             this.wins.bonus = Object.create(null);
+             this.wins.bonus.wins = [];
+             var rand = Math.floor(Math.random()*4)+3;
+             for(var p=0; p<rand; ++p)
+             {
+                var prize = ((Math.random()*10000)+250);
+                this.wins.bonus.wins.push(prize);    
+             }
+             break;
+          }
+      }
+  }
   
   for(var line=0; line<this.winlines.length; ++line)
   {
