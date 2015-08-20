@@ -20,7 +20,7 @@ AnimatedSymbol.prototype.frames;
 
 
 AnimatedSymbol.prototype.animate = function(container){
-    console.log("Symbol id",this.id,"should animate!");
+    console.log("Symbol id",this.id," animate...");
     
     this.container = container;
     
@@ -94,6 +94,4 @@ AnimatedSymbol.prototype.animate = function(container){
             that.container.removeChild(that.movieClip);
             Events.Dispatcher.dispatchEvent(new Event(Event.SYMBOL_ANIMATION_COMPLETE));
         }
-    
-    console.log("WTF")
 }

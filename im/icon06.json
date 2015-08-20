@@ -1,6 +1,6 @@
 {"frames": {
 
-"Icon06_01.png":
+"Icon06_1.png":
 {
 	"frame": {"x":334,"y":434,"w":164,"h":142},
 	"rotated": false,
@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":21,"y":33,"w":164,"h":142},
 	"sourceSize": {"w":204,"h":204}
 },
-"Icon06_03.png":
+"Icon06_3.png":
 {
 	"frame": {"x":334,"y":290,"w":164,"h":142},
 	"rotated": false,
@@ -16,7 +16,7 @@
 	"spriteSourceSize": {"x":21,"y":33,"w":164,"h":142},
 	"sourceSize": {"w":204,"h":204}
 },
-"Icon06_05.png":
+"Icon06_5.png":
 {
 	"frame": {"x":168,"y":434,"w":164,"h":142},
 	"rotated": false,
@@ -24,7 +24,7 @@
 	"spriteSourceSize": {"x":21,"y":33,"w":164,"h":142},
 	"sourceSize": {"w":204,"h":204}
 },
-"Icon06_07.png":
+"Icon06_7.png":
 {
 	"frame": {"x":2,"y":2,"w":164,"h":144},
 	"rotated": false,
@@ -32,7 +32,7 @@
 	"spriteSourceSize": {"x":21,"y":31,"w":164,"h":144},
 	"sourceSize": {"w":204,"h":204}
 },
-"Icon06_09.png":
+"Icon06_9.png":
 {
 	"frame": {"x":168,"y":290,"w":164,"h":142},
 	"rotated": false,

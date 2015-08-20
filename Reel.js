@@ -67,7 +67,7 @@ Reel.prototype.getPositioningData = function(){
     var scaling = ReelsScreen.scaleDown;
     var scale = getWindowScale();
     
-    console.log("REEL", this.id)
+    //console.log("REEL", this.id)
     var data = [];
     
     for(var s=1; s<4; ++s){
@@ -87,8 +87,8 @@ Reel.prototype.getPositioningData = function(){
         r.height = h;
         
         data.push(r);        
-        console.log("D", data[data.length-1].x,data[data.length-1].y,data[data.length-1].width,data[data.length-1].height)        
-        console.log("");
+        //console.log("D", data[data.length-1].x,data[data.length-1].y,data[data.length-1].width,data[data.length-1].height)        
+        //console.log("");
     }
     
     return data;   

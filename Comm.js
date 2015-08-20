@@ -168,6 +168,7 @@ function Comm(vhostIn) {
     {
         // timeout and http errors should use "connection" error message
         //ErrorDialog.show("connection", true, true);
+        console.log("CONN ERR")
     };
 	
 	// default timeout handler
@@ -175,6 +176,7 @@ function Comm(vhostIn) {
     {
         // timeout and http errors should use "connection" error message
         //ErrorDialog.show("connection", true, true);
+        console.log("CONN TIMEOUT")
 	};
 
     this.setMimeType = function (mimeType) {

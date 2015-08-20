@@ -10,13 +10,13 @@ function Game(){
     this.rect = null;
     this.reelset = null;
 
-    //this.vhost = new VirtualHost([reels_0,reels_1]);
     this.dataParser = new DataParser();
     var server = "http:\\\\10.32.10.73:8090\\PIXI";
-    this.serverProxy = new ServerProxy(server, this.dataParser, this.vhost);
+    this.serverProxy = new ServerProxy(server, this.dataParser);
     
     this.onInitResponseReceived = this.onInitResponseReceived.bind(this);
     this.onBetResponseReceived = this.onBetResponseReceived.bind(this);
+    this.onInvalidBetResponseReceived = this.onInvalidBetResponseReceived.bind(this);
     this.onBonusResponseReceived = this.onBonusResponseReceived.bind(this);
     this.onReelsSpinning = this.onReelsSpinning.bind(this);
 
@@ -33,7 +33,8 @@ Game.prototype.layers = null;
 Game.prototype.reelsScreen = null;
 Game.prototype.bonusScreen = null;
 Game.prototype.currentScreen = null;
-Game.prototype.responseReceived = false;
+Game.prototype.validResponseReceived = false;
+Game.prototype.invalidResponseReceived = false;
 Game.prototype.reelsSpinning = false;
 Game.prototype.vhost = null;
 
@@ -246,8 +247,10 @@ Game.prototype.onSpinReels = function(event){
     req.foitems = this.foitems;
     
     Events.Dispatcher.addEventListener(Event.VALID_RESPONSE_RECEIVED, this.onBetResponseReceived);
+    Events.Dispatcher.addEventListener(Event.INVALID_RESPONSE_RECEIVED, this.onInvalidBetResponseReceived);
     Events.Dispatcher.addEventListener(Event.ALL_REELS_SPINNING,this.onReelsSpinning);
-    this.responseReceived = false;
+    this.validResponseReceived = false;
+    this.invalidResponseReceived = false;
     this.reelsSpinning = false;
     
     this.serverProxy.makeRequest(req);
@@ -260,7 +263,12 @@ Game.prototype.onSpinReels = function(event){
 Game.prototype.onReelsSpinning = function(event){
     Events.Dispatcher.removeEventListener(Event.ALL_REELS_SPINNING, this.onReelsSpinning);
     this.reelsSpinning = true;
-    if(this.responseReceived)this.onStopReels();
+    if(this.validResponseReceived){
+        this.onStopReels();
+    }
+    else if(this.invalidResponseReceived){
+        this.onStopReelsOnError();
+    }
 }
 
 /**
@@ -268,9 +276,17 @@ Game.prototype.onReelsSpinning = function(event){
  */
 Game.prototype.onBetResponseReceived = function(event){
     Events.Dispatcher.removeEventListener(Event.VALID_RESPONSE_RECEIVED, this.onBetResponseReceived);
-    this.responseReceived = true;
+    this.validResponseReceived = true;
     if(this.reelsSpinning){
         this.onStopReels();
+    }
+}
+
+Game.prototype.onInvalidBetResponseReceived = function(event){
+    Events.Dispatcher.removeEventListener(Event.INVALID_RESPONSE_RECEIVED, this.onInvalidBetResponseReceived);
+    this.invalidResponseReceived = true;
+    if(this.reelsSpinning){
+        this.onStopReelsOnError();
     }
 }
 
@@ -286,13 +302,60 @@ Game.prototype.onInitResponseReceived = function(event){
  * 
  */
 Game.prototype.onStopReels = function(){
-
     var stops = this.dataParser.getReelStops();
-    console.log("call stop pos " + stops);
-    
     this.reelsScreen.stopReels([0,200,400,600,800],stops,reels[this.dataParser.getReelLayout()]);
+    console.log("call stop pos " + stops);
 };
 
+/**
+ * No server? Or server error! Don't use for real! Do a fake safe-stop!!
+ */
+Game.prototype.onStopReelsOnError = function(){
+    var reelset = 0;
+    var stops = [];
+    
+    // Set from faked foitems
+    if(this.foitems != null){
+        reelset = this.foitems.shift();
+        stops = this.foitems.slice(0,5);
+    }
+    
+    // Set random result
+    else {
+        // Decide on bonus 
+        if(Math.floor(Math.random() * 10) > 6){
+            
+            reelset = 1;
+            
+            // Set stops
+            for(var reel in reels[reelset]){
+                var stop =  Math.floor( Math.random() * reels[reelset][reel].length );
+                stops.push(stop);
+            }
+            
+            // Show bonus symbol middle reel
+            var reel = reels[reelset][2];
+            var index = reel.indexOf(11);
+            var offset = (Math.floor( (Math.random() * 10) ) %3 )-1;
+            index = (index + offset + reel.length) % reel.length;
+            stops[2] = index;
+        } 
+        // no bonus
+        else{
+            reelset = 0;
+            for(var reel in reels[reelset]){
+                var stop =  Math.floor( Math.random() * reels[reelset][reel].length );
+                stops.push(stop);
+            }
+        }
+        // Safe positions, no bonus
+        // reelset = 0;
+        //stops = [0,9,3,30,4];
+    }
+    
+    this.reelsScreen.stopReels([0,200,400,600,800], stops, reels[reelset]);
+    console.log("call stop pos " + stops);
+};
 
 
 

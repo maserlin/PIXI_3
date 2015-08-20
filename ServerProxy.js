@@ -1,13 +1,9 @@
     
-    function ServerProxy(server, dataParser, virtualHost){
+    function ServerProxy(server, dataParser){
         this._eventManager = Events.Dispatcher;
         this._dataParser = dataParser;
         this.server = server;
         this.objComms = new Comm();
-        
-        // If null, we use a real server, otherwise this one.
-        // Transparent to game, we just signal a response received and parsed.
-        this.virtualHost = virtualHost;
         
         this.receiveResponse = this.receiveResponse.bind(this);
         this.receiveErrorResponse = this.receiveErrorResponse.bind(this);
@@ -84,13 +80,8 @@
        // var server = wrapper.getGameEndpointUrl();
        console.log(this.server);
        
-       if(this.virtualHost != null){
-           this.virtualHost.receiveRequest(this._requestData, this.receiveResponse, this.receiveErrorResponse);
-       }
-       else {
-           // Post to server, wait for response       
-           this.objComms.doPost(this.server, this._requestData, this.receiveResponse, this.receiveErrorResponse);
-       }
+       // Post to server, wait for response       
+       this.objComms.doPost(this.server, this._requestData, this.receiveResponse, this.receiveErrorResponse);
               
         // Get new time of last bet.
         this._timeOfLastBet = new Date().getTime();

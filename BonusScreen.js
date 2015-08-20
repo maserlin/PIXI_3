@@ -8,12 +8,23 @@ function BonusScreen(winCalculator)
     this.alpha = 0;    
     this.total = 0;
     
-    for(var r=0;r<this.results.length; ++r){
+    // Split the screen into a 7x5 grid for explosion positions.
+    // remove one each time a position is chosen to prevent overlap.
+    this.screenGrid = [];
+    var size = getWindowBounds();// 1227, 789
+    for(var sx=0; sx<7; ++sx){
+        for(var sy=0; sy<5; ++sy){
+            var p = new Point(0,0);
+            p.x = (size.x/7 * (sx+1))-size.x/14;
+            p.y = (size.y/5 * (sy+1))-size.y/10;
+            this.screenGrid.push(p);
+        }
+    }
+
+    for(var r=0; r<this.results.length; ++r){
         this.addExplosion(r);
         this.total += this.results[r];
     }
-    
-    
     
     this.start = this.start.bind(this);
     this.cleanUp = this.cleanUp.bind(this);
@@ -24,6 +35,13 @@ function BonusScreen(winCalculator)
 }
 BonusScreen.prototype = Object.create(PIXI.Container.prototype);
 BonusScreen.constructor = BonusScreen;
+BonusScreen.prototype.alpha = null;
+BonusScreen.prototype.total = null;
+BonusScreen.prototype.screenGrid = null;
+BonusScreen.prototype.results = null;
+BonusScreen.prototype.winCalculator = null;
+
+
 
 BonusScreen.prototype.start = function(){
     console.log("Bonus screen START");
@@ -95,7 +113,8 @@ BonusScreen.prototype.onClick = function(explosion){
 
 
 BonusScreen.prototype.addExplosion = function(id){
-    console.log("Explosion at",x,y)
+    console.log("Explosion");
+    
     var explosionTextures = [];    
     
     for (var i=0; i < 26; i++) 
@@ -105,7 +124,12 @@ BonusScreen.prototype.addExplosion = function(id){
     };
     
     var explosion = new PIXI.extras.MovieClip(explosionTextures);
-    var size = getWindowBounds();// 1227, 789
+    
+    var rand = Math.floor(Math.random() * this.screenGrid.length);
+    var point = this.screenGrid.splice(rand, 1);
+    console.log("explosion at ", point[0].x, point[0].y)
+
+/*
     var x = Math.random() * size.x;
     var y = Math.random() * size.y;
 
@@ -114,9 +138,10 @@ BonusScreen.prototype.addExplosion = function(id){
 
     if(y<50)y+=120;
     if(y>size.y-50)y-=120;
+*/
 
-    explosion.position.x = x;
-    explosion.position.y = y;
+    explosion.position.x = point[0].x;
+    explosion.position.y = point[0].y;
     explosion.anchor.x = explosion.anchor.y = 0.5;
     explosion.rotation = Math.random() * Math.PI;
     explosion.visible = false;
