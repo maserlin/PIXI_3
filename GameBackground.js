@@ -7,7 +7,7 @@ function GameBackground(imageUrls){
     
     // Center image
     for(var bgImage in this.backgrounds){
-        this.backgrounds[bgImage].anchor.x = this.backgrounds[bgImage].anchor.y = 0.5;
+        this.backgrounds[bgImage].anchor = new Point(0.5, 0.5);
     }
 
     // Initial positioning

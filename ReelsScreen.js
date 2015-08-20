@@ -79,13 +79,14 @@ ReelsScreen.prototype.spinReels = function(timing){
     this.reelset.spinReels(timing);
 };
 
+
 /**
  * 
  * @param {Object} timing : array of stop time offsets
  * @param {Object} stopPos : array of stop positions
  */
-ReelsScreen.prototype.stopReels = function(timing, stopPos){
-    this.reelset.stopReels(timing, stopPos);
+ReelsScreen.prototype.stopReels = function(timing, stopPos, reelbands){
+    this.reelset.stopReels(timing, stopPos, reelbands);
 };
 
 /**
@@ -113,7 +114,10 @@ ReelsScreen.prototype.onReelsStopped = function(){
     }
 }
 
-
+/**
+ * 
+ * @param {Object} event
+ */
 ReelsScreen.prototype.onWinAnimatorComplete = function(event){
     if(this.winData.bonus){
         Events.Dispatcher.dispatchEvent(new Event(Event.BONUS_START));  

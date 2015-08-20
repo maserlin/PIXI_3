@@ -234,6 +234,15 @@
         }
     };
     
+    
+    DataParser.prototype.getReelStops = function(){
+        return this.responseToGameJSON.Spin.arrPosition;
+    }
+    DataParser.prototype.getReelLayout = function(){
+        return this.responseToGameJSON.Spin.intLayout;
+    }
+    
+    
     /**
      * Use the recieved XML or other response, now parsed to JSON,
      * to create platform-independent JSON for the game.
@@ -449,6 +458,7 @@
         // Used to construct an error response ONLY.
         this.objSpinRequestJson = jsonData;
     
+    
         // Init output.
         var strSpinRequest="";
         
@@ -459,8 +469,9 @@
         {
             strSpinRequest = '<PlaceBetRequest gameTitle=\"' + title + '">';
             
-            strSpinRequest += '<' + jsonData.code + ' stake="' + jsonData.stake.toFixed(2) + 
-                              '" winlines="' + jsonData.winlines; 
+            strSpinRequest += '<' + jsonData.code + ' stake="' + (jsonData.stake/100).toFixed(2) + 
+                              '" winlines="' + jsonData.winlines + 
+                              '" foitems="' + jsonData.foitems; 
             strSpinRequest += '" />';
     
             //strSpinRequest += '</PlaceBetRequest>';

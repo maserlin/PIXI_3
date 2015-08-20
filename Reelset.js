@@ -58,6 +58,7 @@ Reelset.prototype.symbolData = null;
 Reelset.symbolData = null;
 
 
+
 /**
  * 2D array reel x symbol bounds for winline display
  */
@@ -117,12 +118,12 @@ Reelset.prototype.spinReels = function(timing){
 /**
  * TODO use system timer?
  */
-Reelset.prototype.stopReels = function(timing, positions){
+Reelset.prototype.stopReels = function(timing, positions, reelbands){
     var that = this;
     var next = 0;
     for(var t in timing){
        setTimeout(function(){
-           that.reels[next].stop(positions[next]);
+           that.reels[next].stop(positions[next],reelbands[next]);
            ++next 
        },timing[t]);      
     }

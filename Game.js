@@ -10,9 +10,9 @@ function Game(){
     this.rect = null;
     this.reelset = null;
 
-    this.vhost = new VirtualHost([reels_0,reels_1]);
+    //this.vhost = new VirtualHost([reels_0,reels_1]);
     this.dataParser = new DataParser();
-    var server = "http:\\\\10.32.10.24:8090\\PIXI";
+    var server = "http:\\\\10.32.10.73:8090\\PIXI";
     this.serverProxy = new ServerProxy(server, this.dataParser, this.vhost);
     
     this.onInitResponseReceived = this.onInitResponseReceived.bind(this);
@@ -35,23 +35,27 @@ Game.prototype.bonusScreen = null;
 Game.prototype.currentScreen = null;
 Game.prototype.responseReceived = false;
 Game.prototype.reelsSpinning = false;
+Game.prototype.vhost = null;
 
   
 /**
  * TODO proper config  
  */
+var reels
 var reels_0 = [ [7,5,3,2,0,1,3,0,2,2,0,1,3,0,2,4,5,6,7,0,4,1,0,2,3,1,8,2,4,1,0,3,2,1,0,4,6,5,7,5,3,2,4,5,6,7,8,9,8,7,6,5,1],
+                [1,4,5,1,6,5,0,2,1,2,0,1,3,0,2,0,3,4,0,2,3,7,6,1,4,0,3,1,2,6,7,2,1,0,4,1,0,0,7,5,3,2,4,5,6,7,8,9,8,7,6,5,3],
+                [3,1,7,5,3,0,4,1,2,0,1,3,0,2,6,5,0,1,2,0,3,2,1,3,8,2,9,8,4,0,1,3,0,2,1,4,2,5,7,5,3,2,4,5,6,7,8,9,8,7,6,5,7],
+                [0,3,2,4,1,0,3,2,0,4,3,0,1,0,2,2,0,1,3,0,2,3,0,7,6,5,1,6,5,7,2,1,0,4,1,0,0,2,7,5,3,2,4,5,6,7,8,9,8,7,6,5,1],
+                [0,8,4,0,1,8,0,2,0,1,3,0,4,2,2,0,1,3,0,2,0,1,3,2,6,7,5,1,7,5,6,1,0,3,1,0,4,2,7,5,3,2,4,5,6,7,8,9,8,7,6,5,0] ];
+                
+var reels_1 = [ [7,5,3,2,0,1,3,0,2,2,0,1,3,0,2,4,5,6,7,0,4,1,0,2,3,1,8,2,4,1,0,3,2,1,0,4,6,5,7,5,3,2,4,5,6,7,8,9,8,7,6,5,1],
                 [1,4,5,1,6,5,0,2,1,2,0,1,3,0,2,0,3,4,0,2,3,7,6,1,4,0,3,1,2,6,7,2,1,0,4,1,0,0,7,5,3,2,4,5,6,7,8,9,8,7,6,5,3],
                 [11,1,7,5,3,0,4,1,2,0,1,3,0,2,6,5,0,1,2,0,3,2,1,3,8,2,9,8,4,0,1,3,0,2,1,4,2,5,7,5,3,2,4,5,6,7,8,9,8,7,6,5,7],
                 [0,3,2,4,1,0,3,2,0,4,3,0,1,0,2,2,0,1,3,0,2,3,0,7,6,5,1,6,5,7,2,1,0,4,1,0,0,2,7,5,3,2,4,5,6,7,8,9,8,7,6,5,1],
                 [0,8,4,0,1,8,0,2,0,1,3,0,4,2,2,0,1,3,0,2,0,1,3,2,6,7,5,1,7,5,6,1,0,3,1,0,4,2,7,5,3,2,4,5,6,7,8,9,8,7,6,5,0] ];
                 
-var reels_1 = [ [7,5,3,2,4,5,6,7,8,9,8,7,6,5,4,5,6,7,8,9,8,7,6,5,6,7,8,9,8,4,6,5,1],
-                [7,5,3,2,4,5,6,7,8,9,8,7,6,5,4,5,6,7,8,9,8,7,6,5,6,7,8,9,8,4,6,5,1],
-                [7,5,3,2,4,5,6,7,8,9,8,7,6,5,4,5,6,7,8,9,8,7,6,5,6,7,8,9,8,4,6,5,1],
-                [7,5,3,2,4,5,6,7,8,9,8,7,6,5,4,5,6,7,8,9,8,7,6,5,6,7,8,9,8,4,6,5,1],
-                [7,5,3,2,4,5,6,7,8,9,8,7,6,5,4,5,6,7,8,9,8,7,6,5,6,7,8,9,8,4,6,5,1]];
-                
+var reels = [reels_0,reels_1];
+
 //Shuffle fake reels    
 /*
 for(var i=0;i<reels_0.length;++i){
@@ -93,7 +97,7 @@ Game.prototype.onAssetsLoaded = function(obj){
     this.layers[Game.BACKGROUND].addChild(this.gameBackground);
 
     // manages all reels game components
-    this.reelsScreen = new ReelsScreen(reels_0, this.winCalculator);
+    this.reelsScreen = new ReelsScreen(reels[0], this.winCalculator);
 
     // Right now we want to show the ReelsScreen
     this.loadScreen = this.loadScreen.bind(this);
@@ -225,11 +229,11 @@ Game.prototype.onWinDisplayComplete = function(){
  */
 Game.prototype.onSpinReels = function(event){
     console.log("call spin");
-    this.cheat = null;
+    this.foitems = null;
     if(event.data.name == "cheat"){
         console.log("Cheat button");
-        this.cheat = [29,26,27,25,31];
-        this.cheat = [1,0,0,0,0];
+        this.foitems = [0,29,26,27,25,31];
+        this.foitems = [1,0,0,0,0,0];
     }
     
     /**
@@ -239,19 +243,14 @@ Game.prototype.onSpinReels = function(event){
     req.code = "BET";
     req.stake = 200;
     req.winlines = 20;
+    req.foitems = this.foitems;
     
     Events.Dispatcher.addEventListener(Event.VALID_RESPONSE_RECEIVED, this.onBetResponseReceived);
     Events.Dispatcher.addEventListener(Event.ALL_REELS_SPINNING,this.onReelsSpinning);
     this.responseReceived = false;
     this.reelsSpinning = false;
     
-    if(this.vhost){
-        this.vhost.createResponse(req,this.cheat);
-    }
-    else {
-        this.serverProxy.makeRequest(req);
-    }
-
+    this.serverProxy.makeRequest(req);
     this.reelsScreen.spinReels([0,200,400,600,800]);
 };
 
@@ -270,7 +269,9 @@ Game.prototype.onReelsSpinning = function(event){
 Game.prototype.onBetResponseReceived = function(event){
     Events.Dispatcher.removeEventListener(Event.VALID_RESPONSE_RECEIVED, this.onBetResponseReceived);
     this.responseReceived = true;
-    if(this.reelsSpinning)this.onStopReels();
+    if(this.reelsSpinning){
+        this.onStopReels();
+    }
 }
 
 Game.prototype.onBonusResponseReceived = function(event){
@@ -286,10 +287,10 @@ Game.prototype.onInitResponseReceived = function(event){
  */
 Game.prototype.onStopReels = function(){
 
-    var stops = this.vhost.getReelStops();
+    var stops = this.dataParser.getReelStops();
     console.log("call stop pos " + stops);
-
-    this.reelsScreen.stopReels([0,200,400,600,800],stops);
+    
+    this.reelsScreen.stopReels([0,200,400,600,800],stops,reels[this.dataParser.getReelLayout()]);
 };
 
 

@@ -32,6 +32,8 @@ var renderer = PIXI.autoDetectRenderer(size.x, size.y);
 
 // Add the renderer view element to the DOM
 document.body.appendChild(renderer.view);
+document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+document.body.scroll = "no"; // ie only
 
 /**
  * Window loaded: 

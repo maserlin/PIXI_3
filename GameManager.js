@@ -12,7 +12,7 @@ function GameManager(){
 
     
     this.dataParser = new DataParser();
-    var server = "http:\\\\10.32.10.24:8090\\PIXI";
+    var server = "http:\\\\10.32.10.73:8090\\PIXI";
     this.serverProxy = new ServerProxy(server, this.dataParser);
     
     this.onBetEvent = this.onBetEvent.bind(this);
