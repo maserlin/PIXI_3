@@ -276,6 +276,7 @@ Game.prototype.onReelsSpinning = function(event){
  */
 Game.prototype.onBetResponseReceived = function(event){
     Events.Dispatcher.removeEventListener(Event.VALID_RESPONSE_RECEIVED, this.onBetResponseReceived);
+    Events.Dispatcher.removeEventListener(Event.INVALID_RESPONSE_RECEIVED, this.onInvalidBetResponseReceived);
     this.validResponseReceived = true;
     if(this.reelsSpinning){
         this.onStopReels();
@@ -283,6 +284,7 @@ Game.prototype.onBetResponseReceived = function(event){
 }
 
 Game.prototype.onInvalidBetResponseReceived = function(event){
+    Events.Dispatcher.removeEventListener(Event.VALID_RESPONSE_RECEIVED, this.onBetResponseReceived);
     Events.Dispatcher.removeEventListener(Event.INVALID_RESPONSE_RECEIVED, this.onInvalidBetResponseReceived);
     this.invalidResponseReceived = true;
     if(this.reelsSpinning){
